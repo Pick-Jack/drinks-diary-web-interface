@@ -1,0 +1,24 @@
+
+@import '../../_helpers/style-mixins/colors';
+@import '../../_helpers/style-utility/form-control/input';
+
+.volumeSelector {
+    width: 100%;
+    display: flex;
+                        
+    input {
+        @extend %input;
+        border-right-width: 0;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+
+    select {
+        @extend %input;
+        @extend %selectInput;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+        box-sizing: border-box;
+        padding-left: 2%;
+    }
+}

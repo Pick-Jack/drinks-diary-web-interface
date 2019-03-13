@@ -1,0 +1,122 @@
+@import "button-size-config";
+@import "button-theme-config";
+
+// Default themed button classes
+
+%button-base, .button {
+    width: auto;
+    display: inline-block;
+    box-sizing: content-box;
+    
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+%button, .button {
+    @extend %button-base;
+    @extend %button-sm;
+    @extend %button-default;
+}
+
+.buttonXS {
+    @extend %button-base;
+    @extend %button-xs;
+    @extend %button-default;
+}
+
+.buttonSM {
+    @extend %button;
+}
+
+.buttonLG {
+    @extend %button-base;
+    @extend %button-lg;
+    @extend %button-default;
+}
+
+// Success themed button classes
+
+%buttonSuccess, .buttonSuccess {
+    @extend %button-base;
+    @extend %button-sm;
+    @extend %button-success;
+}
+
+.buttonSuccessXS {
+    @extend %button-base;
+    @extend %button-xs;
+    @extend %button-success;
+}
+
+.buttonSuccessSM {
+    @extend %buttonSuccess;
+}
+
+.buttonSuccessLG {
+    @extend %button-base;
+    @extend %button-lg;
+    @extend %button-success;
+}
+
+// Warning themed button classes
+
+%buttonWarning, .buttonWarning {
+    @extend %button-base;
+    @extend %button-sm;
+    @extend %button-warning;
+}
+
+.buttonWarningXS {
+    @extend %button-base;
+    @extend %button-xs;
+    @extend %button-warning;
+}
+
+.buttonWarningSM {
+    @extend %buttonWarning;
+}
+
+.buttonWarningLG {
+    @extend %button-base;
+    @extend %button-lg;
+    @extend %button-warning;
+}
+
+// Danger themed button classes
+
+%buttonDanger, .buttonDanger {
+    @extend %button-base;
+    @extend %button-sm;
+    @extend %button-danger;
+}
+
+.buttonDangerXS {
+    @extend %button-base;
+    @extend %button-xs;
+    @extend %button-danger;
+}
+
+.buttonDangerSM {
+    @extend %buttonDanger;
+}
+
+.buttonDangerLG {
+    @extend %button-base;
+    @extend %button-lg;
+    @extend %button-danger;
+}
+
+// Configure hover events for the above classes
+
+.button:hover, .buttonXS:hover, .buttonSM:hover, .buttonLG:hover {
+    color: white;
+    background-color: $theme-color;
+    transition: background-color 100ms linear;
+}
+
+.buttonSuccess:hover, .buttonSuccessXS:hover, .buttonSuccessSM:hover, .buttonSuccessLG:hover,
+.buttonWarning:hover, .buttonWarningXS:hover, .buttonWarningSM:hover, .buttonWarningLG:hover,
+.buttonDanger:hover, .buttonDanger:hover, .buttonDangerSM:hover, .buttonDangerLG:hover {
+    opacity: 0.8;
+}

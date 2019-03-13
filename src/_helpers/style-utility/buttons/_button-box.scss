@@ -1,0 +1,64 @@
+
+@import 'button-theme-config';
+
+.buttonBox {
+    @extend %button-default;
+
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    
+    /* Extra small devices (phones, 600px and down) */
+    @media only screen and (max-width: $xs) {
+        width: 15vw;
+        height: 15vw;
+        padding: 2vw 2vw;
+        border-radius: 1vw;
+    } 
+    
+    /* Small devices (portrait tablets and large phones, 600px and up) */
+    @media only screen and (min-width: $sm) { 
+        height: 100px;
+        width: 100px;
+        padding: 25px;
+        border-radius: 5px;
+    } 
+
+    i { 
+        display: block;
+    
+        /* Extra small devices (phones, 600px and down) */
+        @media only screen and (max-width: $xs) {
+            font-size: 1.25em; 
+        } 
+        
+        /* Small devices (portrait tablets and large phones, 600px and up) */
+        @media only screen and (min-width: $sm) { 
+            font-size: 2em; 
+        } 
+    }
+
+    label {
+        margin: 0px;
+        display: block;
+        line-height: 25px;
+    
+        /* Extra small devices (phones, 600px and down) */
+        @media only screen and (max-width: $xs) {
+            font-size: 0.85em;
+        } 
+        
+        /* Small devices (portrait tablets and large phones, 600px and up) */
+        @media only screen and (min-width: $sm) { 
+            font-size: 1em; 
+        } 
+    }
+}
+
+.buttonBox:hover {
+    color: white;
+    cursor: pointer;
+    background-color: $theme-color;
+    transition: background-color 100ms linear;
+}

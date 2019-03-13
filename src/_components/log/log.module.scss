@@ -1,0 +1,64 @@
+
+@import '../../_helpers/style-mixins/colors';
+
+%navButton {
+    padding: 5px 10px;
+    font-size: 1.5em;
+}
+
+%navButton:hover {
+    color: white;
+    cursor: pointer;
+    background-color: $theme-color;
+}
+
+.log {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    .logActions {
+        display: flex;
+        flex: 0 0 auto;
+        align-items: flex-end;
+        justify-content: center;
+        box-sizing: border-box;
+        padding: 5px 0;
+    }
+
+    .prev {
+        @extend %navButton;
+        border-right: 1px solid black;
+    }
+
+    .next {
+        @extend %navButton;    
+        border-left: 1px solid black;
+    }
+
+    .singleLogView {
+        flex: 1 1 auto;
+        display : flex;
+        flex-direction: column;
+
+        .logDate {
+            width: 100%;
+            display: flex;
+            flex: 0 0 auto;
+            justify-content: space-between;
+            border: 1px solid black;
+            border-right-width: 0;
+            border-left-width: 0;
+        }
+
+        .logMain {
+            display: flex;
+            flex: 1 1 auto;
+            flex-wrap: wrap;
+            overflow-y: auto;
+            align-items: flex-start;
+            align-content: flex-start;
+        }
+    }
+}

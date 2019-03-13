@@ -1,0 +1,30 @@
+
+%button-default {
+    color: $theme-color;
+    background-color: white;
+    border-style: solid;
+    border-color: $theme-color;
+    border-width: 1px;
+    border-radius: 5px;
+}
+
+%button-theme {
+    @extend %button-default;
+    color: white;
+    border: none;
+}
+
+%button-success {
+    @extend %button-theme;
+    background-color: $success-color;
+}
+
+%button-warning {
+    @extend %button-theme;
+    background-color: $warning-color;
+}
+
+%button-danger {
+    @extend %button-theme;
+    background-color: $danger-color;
+}

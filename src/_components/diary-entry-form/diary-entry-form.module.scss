@@ -1,0 +1,46 @@
+
+@import '../../_helpers/style-mixins/query-parameters';
+
+@media only screen and (min-width: $sm) {
+    #createDiaryEntry {
+        width: 1000px;
+        box-sizing: border-box;
+
+        .formMain {
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            
+            img {
+                width: 200px;
+                height: 200px;
+                flex: 0 0 auto;
+                margin-top: 20px;
+                background-color: lightgray;
+                border-radius: 50%;
+            }
+        
+            .inputs {
+                flex: 1 1 auto;
+                padding: 0px 3%;
+                box-sizing: border-box;
+            }
+        }
+        
+        @media only screen and (max-width: 1000px) {
+            .formMain {
+                flex-direction: column;
+
+                img{ 
+                    align-self: center;
+                }
+            }
+        }
+
+        .formOptions {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 3%;
+        }
+    }
+}
