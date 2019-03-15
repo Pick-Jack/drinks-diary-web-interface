@@ -1,7 +1,5 @@
+import { resolve } from "path";
 
-const UsersService = {
-    login,
-}
 
 /** 
  * Submit user verification request to the API with the given details 
@@ -10,7 +8,7 @@ const UsersService = {
  * @param (string) password is the password submitted by the client
  * @returns (JSON) the server response
  */
-function login(email, password) {
+export function login(email, password) {
     // Configure request options
     const requestOptions = {
         method: 'POST',
@@ -19,7 +17,7 @@ function login(email, password) {
     };
 
     // Submit verification request to API
-    var fetchPromise = fetch(`${process.env.API_URL}/users/verifyCredentials`, requestOptions)
+    var fetchPromise = fetch(`${process.env.REACT_APP_API_URL}/users/verifyCredentials`, requestOptions)
     return fetchPromise.then(
         response => {
             return response.json()
@@ -31,4 +29,34 @@ function login(email, password) {
 }
 
 
-export default UsersService
+/**
+ * Submit a user registration request to the Drinks Diary API
+ * @param {JSON} args registration arguments
+ * @return {Promise} returns a promise which resolves the the response json
+ */
+export function register(args) {
+    // Configure request options
+    const options = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            email: args.email,
+            password: args.password,
+            forename: args.forename,
+            surname: args.surname,
+            gender: args.gender,
+            dob: args.dob
+        })
+    }
+    
+    // Submit user creation request to API
+    var fetchPromise = fetch(`${process.env.REACT_APP_API_URL}/users/createUser`, options)
+    return fetchPromise.then(
+        response => {
+            return response.json()
+        },
+        error => {
+            throw error
+        }
+    )
+}

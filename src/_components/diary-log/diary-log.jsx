@@ -45,7 +45,7 @@ class DiaryLog extends React.Component {
                     <DiaryEntry onClick={this.displayExpand} drinkName={"Black Coffee"} volume={"1 Cup"} datetime={"15:15"} 
                             thumbnail={defaultDrink} alchoholic={false} caffeinated={true} />
                 </Log>
-                { this.state.displayExpand && <DiaryEntryExpand entryProps={this.state.entryProps} hide={this.displayExpand} /> }
+                { this.state.displayExpand && <DiaryEntryExpand match={this.props.match} entryProps={this.state.entryProps} hide={this.displayExpand} /> }
             </div>
         )
     }
@@ -56,7 +56,7 @@ const DiaryEntryExpand = (props) => (
 
         <div className={Style.header}>
             <a onClick={ () => props.hide(false, {}) } className={Style.close}><i className="fa fa-times"></i></a>
-            <Link to="" className={ButtonStyle.buttonSM}><i className="fa fa-pencil-alt"></i> Edit</Link>
+            <Link to={`${props.match.url}/edit`} className={ButtonStyle.buttonSM}><i className="fa fa-pencil-alt"></i> Edit</Link>
         </div>
 
         <div className={Style.main}>

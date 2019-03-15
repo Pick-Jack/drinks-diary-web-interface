@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { setNavOptions } from '../../../_redux/actions/nav-options.actions';
 // Component imports
 import DiaryLog from '../../diary-log';
-import DiaryEntryForm from '../../diary-entry-form'
+import { CreateEntryForm, EditEntryForm } from '../../diary-entry-form'
 // Style Imports
 import Style from './diary-view.module.scss';
 
@@ -21,8 +21,8 @@ const DiaryView = (props) => (
         <div className={Style.viewContent}>
             <Switch>
                 <Route exact path={props.match.url} component={DiaryLog} />
-                <Route path={`${props.match.url}/create`} component={DiaryEntryForm} />
-                <Route path={`${props.match.url}/edit`} />
+                <Route path={`${props.match.url}/create`} component={CreateEntryForm} />
+                <Route path={`${props.match.url}/edit`} component={EditEntryForm} />
                 <Route path={`${props.match.url}/exerciseLog`} />
                 <Route path={`${props.match.url}/exerciseLog/create`} />
                 <Route path={`${props.match.url}/exerciseLog/edit`} />

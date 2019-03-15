@@ -63,10 +63,21 @@
             }
         }
 
-        .pageContent {
+        .pageMain {
             height: 100%;
             width: calc(100% - 250px);
             overflow-y: auto;
+
+            display: flex;
+            flex-direction: column;
+
+            .messageFlashContainer {
+                flex: 0 0 auto;
+            }
+
+            .content {
+                flex: 1 1 auto;
+            }
         }
     }
 }

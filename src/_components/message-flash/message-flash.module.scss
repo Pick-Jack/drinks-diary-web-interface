@@ -1,0 +1,54 @@
+
+@import '../../_helpers/style-mixins/colors';
+
+%messageFlash {
+    width: 95%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin: 5px auto;
+    padding: 3px 15px;
+    box-sizing: border-box;
+    
+    border-width: 2px;
+    border-radius: 5px;
+    border-style: solid;
+    
+    .message {
+        margin: 7px 5px;
+        p {margin: 0}
+    }
+
+    a {
+        font-size: 1.5em;
+        opacity: 0.7;
+    }
+
+    a:hover {
+        opacity: 0.4;
+        cursor: pointer;
+    }
+}
+
+.messageFlashHide {
+    display: none;
+}
+
+.messageFlash {
+    @extend %messageFlash;
+    border-color: rgba($theme-color, 0.6);
+    background-color: rgba($theme-color, 0.2)
+}
+
+.messageFlashWarning {
+    @extend %messageFlash;
+    border-color: rgba($warning-color, 0.6);
+    background-color: rgba($warning-color, 0.2)
+}
+
+.messageFlashDanger {
+    @extend %messageFlash;
+    border-color: rgba($danger-color, 0.6);
+    background-color: rgba($danger-color, 0.2)
+}

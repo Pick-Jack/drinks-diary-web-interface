@@ -1,12 +1,13 @@
 // React Imports
 import React from 'react';
 // Component Imports
+import MessageFlash from '../message-flash'
 import { Header } from '../presenters/header';
 // Style Imports
 import Style from './application-layout.module.scss';
 
 
-export class DesktopApplicationLayout extends React.Component {
+export default class ApplicationLayout extends React.Component {
 
     render() {       
         return (
@@ -21,21 +22,11 @@ export class DesktopApplicationLayout extends React.Component {
                         </ul>
                     </div>
                     
-                    <div className={Style.pageContent}>
-                        {this.props.children}
+                    <div className={Style.pageMain}>
+                        <div className={Style.messageFlashContainer}><MessageFlash /></div>
+                        <div className={Style.content}>{this.props.children}</div>
                     </div>
                 </div>
-            </div>
-        )
-    }
-}
-
-
-export class MobileApplicationLayout extends React.Component {
-    render () {
-        return (
-            <div id={Style.mobileLayout}>
-
             </div>
         )
     }

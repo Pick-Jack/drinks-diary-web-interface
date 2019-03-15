@@ -1,2 +1,3 @@
-import DiaryEntryForm from './diary-entry-form'
-export default DiaryEntryForm
+
+export {default as CreateEntryForm} from './entry-create-form'
+export {default as EditEntryForm} from './entry-edit-form'

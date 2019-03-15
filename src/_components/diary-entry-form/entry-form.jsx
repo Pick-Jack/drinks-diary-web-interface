@@ -1,9 +1,6 @@
 // React Imports
 import React from 'react';
-import { Link, withRouter } from 'react-router-dom';
-// Redux Imports
-import { connect } from 'react-redux';
-import { setNavOptions } from '../../_redux/actions/nav-options.actions';
+import { Link } from 'react-router-dom';
 // Component Imports 
 import VolumeSelector from '../volume-selector';
 // Style Imports
@@ -12,40 +9,59 @@ import ButtonStyle from '../../_helpers/style-utility/buttons.module.scss';
 import FormStyle from '../../_helpers/style-utility/form-control.module.scss';
 
 
-class CreateDiaryEntry extends React.Component {
+class EntryForm extends React.Component {
+
     constructor(props) {
         super(props)
+        
+        this.state = {}
+        if (this.props.state) {
+            this.state = {...this.state, ...this.props.state}
+        } else {
+            this.state.drinkName = ""    
+            this.state.alcoholic = ""
+            this.state.caffeinated = ""
+            this.state.volume = {amount: "", measurement: ""}
+        }
+    }
 
-        this.props.setNavOptions([
-            (<Link to={`/diary/${this.props.match.params.id}`}><i className="fa fa-arrow-left"></i> Back</Link>),
-        ])
+    onChangeInput = (event, key) => {
+        var newState = {}
+        newState[key] = event.target.value
+        this.setState(newState)
+    }
+
+    onSubmit = (event) => {
+        event.preventDefault()
+        this.props.onSubmit(this.state)
     }
 
     render() {
         return(
-            <form id={Style.createDiaryEntry}>
-                <h3>Create Diary Entry</h3>
+            <form id={Style.createDiaryEntry} onSubmit={(event) => this.onSubmit(event)}>
+                <h3>{this.props.formTitle}</h3>
                 
                 <div className={Style.formMain}>
                     <img  />
 
                     <div className={Style.inputs}>
-
                         <div className={FormStyle.inputGroup}>
                             <label>Drink:</label>
-                            <input className={FormStyle.input} type="text" placeholder="drink name..." value="" />
+                            <input className={FormStyle.input} type="text" placeholder="drink name..." value={this.state.drinkName} 
+                            onChange={(event) => this.onChangeInput(event, "drinkName")} />
                         </div>
                         
                         <div className={FormStyle.inputGroup}>
                             <label>Volume:</label>
-                            <VolumeSelector />
+                            <VolumeSelector onChange={this.onChangeInput} value={this.state.volume} />
                         </div>
 
                         <div className={FormStyle.inputRow}>
                             <div className={FormStyle.inputGroup}>
                                 <label>Contains Alcohol:</label>
-                                <select className={FormStyle.input} value="">
-                                    <option value="" selected disabled>-- select an option --</option>
+                                <select className={FormStyle.input} value={this.state.alcoholic} 
+                                onChangeInput={(event) => this.onChangeInput(event, "alcoholic")}>
+                                    <option value="" disabled>-- select an option --</option>
                                     <option value={false}>Non-alcoholic</option>
                                     <option value={true}>Alcoholic</option>
                                 </select>
@@ -53,16 +69,15 @@ class CreateDiaryEntry extends React.Component {
 
                             <div className={FormStyle.inputGroup}>
                                 <label>Contains Caffeine:</label>
-                                <select className={FormStyle.input} value="">
-                                    <option value="" selected disabled>-- select an option --</option>
+                                <select className={FormStyle.input} value={this.state.caffeinated} 
+                                onChangeInput={(event) => this.onChangeInput(event, "caffeinated")}>
+                                    <option value="" disabled>-- select an option --</option>
                                     <option value={false}>Decaf</option>
                                     <option value={true}>Caffeinated</option>
                                 </select>
                             </div>
                         </div>
-                    </div>
-
-                    
+                    </div>  
                 </div>
 
                 <div className={Style.formOptions}>
@@ -75,13 +90,8 @@ class CreateDiaryEntry extends React.Component {
 }
 
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        setNavOptions: (optionsArray) => {
-            dispatch(setNavOptions(optionsArray))
-        }
-    }
-}
+export default EntryForm
 
-export default withRouter(connect(null, mapDispatchToProps)(CreateDiaryEntry))
+/*
 
+*/
