@@ -3,25 +3,29 @@ import React from 'react';
 import { Link, withRouter } from 'react-router-dom';
 // Redux Imports
 import { connect } from 'react-redux';
-import { setNavOptions } from '../../_redux/actions/nav-options.actions.js';
+import { setBackOption, setNavOptions } from '../../_redux/actions/app.actions.js';
+// Error imports
+import { UnexpectedPlatformError } from '../../_helpers/errors'
 // Component imports
 import Log from '../log';
 import DiaryEntry from './diary-entry';
+import DiaryEntryExpand from './diary-entry-expand'
 // Image imports
 import defaultDrink from '../../_images/default_drink.svg';
 // Style Imports
 import Style from './diary-log.module.scss';
-import ButtonStyle from '../../_helpers/style-utility/buttons.module.scss';
 
 
 class DiaryLog extends React.Component {
     constructor(props) {
         super(props)
     
+        // Set back option
+        this.props.setBackOption("/")
+        // Set nav bar options
         this.props.setNavOptions([
-            (<Link to="/"><i className="fa fa-arrow-left"></i> Back</Link>),
-            (<Link to={`${this.props.match.url}/create`}><i className="fa fa-plus"></i> Create Entry</Link>),
-            (<Link to={`${this.props.match.url}/exerciseLog`}><i className="fa fa-book"></i> Exercise Log</Link>),
+            {location: `${this.props.match.url}/create`, jsx: (<span><i className="fa fa-plus"></i> Create Entry</span>)},
+            {location: `${this.props.match.url}/exerciseLog`, jsx: (<span><i className="fa fa-book"></i> Exercise Log</span>)}
         ])
    
         this.state = {
@@ -30,59 +34,68 @@ class DiaryLog extends React.Component {
         }
     }
 
+    componentDidMount() {
+        // TODO: fetch diary enties from API
+    }
+
     displayExpand = (display=false, entryProps={}) => {
         this.setState({displayExpand: display, entryProps: entryProps})
     }
 
     render() {
-        return (
-            <div className={Style.diaryLog}>
-                <Log>
-                    <DiaryEntry onClick={this.displayExpand} drinkName={"Black Coffee"} volume={"1 Cup"} datetime={"15:15"} 
-                            thumbnail={defaultDrink} alchoholic={false} caffeinated={true} />
-                    <DiaryEntry onClick={this.displayExpand} drinkName={"Black Coffee"} volume={"1 Cup"} datetime={"15:15"} 
-                            thumbnail={defaultDrink} alchoholic={false} caffeinated={true} />
-                    <DiaryEntry onClick={this.displayExpand} drinkName={"Black Coffee"} volume={"1 Cup"} datetime={"15:15"} 
-                            thumbnail={defaultDrink} alchoholic={false} caffeinated={true} />
-                </Log>
-                { this.state.displayExpand && <DiaryEntryExpand match={this.props.match} entryProps={this.state.entryProps} hide={this.displayExpand} /> }
-            </div>
-        )
+        if (this.props.platform === "DESKTOP") {
+            return (
+                <div className={Style.desktopDiaryLog}>
+                    <Log>
+                        <DiaryEntry onClick={this.displayExpand} drinkName={"Black Coffee"} volume={"1 Cup"} datetime={"15:15"} 
+                                thumbnail={defaultDrink} alchoholic={false} caffeinated={true} />
+                        <DiaryEntry onClick={this.displayExpand} drinkName={"Black Coffee"} volume={"1 Cup"} datetime={"15:15"} 
+                                thumbnail={defaultDrink} alchoholic={false} caffeinated={true} />
+                        <DiaryEntry onClick={this.displayExpand} drinkName={"Black Coffee"} volume={"1 Cup"} datetime={"15:15"} 
+                                thumbnail={defaultDrink} alchoholic={false} caffeinated={true} />
+                    </Log>
+                    { this.state.displayExpand && <DiaryEntryExpand match={this.props.match} entryProps={this.state.entryProps} hide={this.displayExpand} /> }
+                </div>
+            )
+        }
+        else if (this.props.platform === "MOBILE") {
+            return (
+                <div className={Style.mobileDiaryLog}>
+                    <Log>
+                        <DiaryEntry match={this.props.match} onClick={this.displayExpand} 
+                        drinkName={"Black Coffee"} volume={"1 Cup"} datetime={"15:15"} thumbnail={defaultDrink} 
+                        alchoholic={false} caffeinated={true} />
+
+                        <Link to={`${this.props.match.url}/create`} className={Style.newEntryOption}>
+                            <h6><i className="fa fa-plus"></i></h6>
+                            <label>New Entry</label>
+                        </Link>
+                    </Log>
+                </div>
+            )
+        }
+        else {
+            throw new UnexpectedPlatformError(this.props.platform, this.constructor.name)
+        }
     }
 }
 
-const DiaryEntryExpand = (props) => (
-    <div className={Style.diaryExpand}>
 
-        <div className={Style.header}>
-            <a onClick={ () => props.hide(false, {}) } className={Style.close}><i className="fa fa-times"></i></a>
-            <Link to={`${props.match.url}/edit`} className={ButtonStyle.buttonSM}><i className="fa fa-pencil-alt"></i> Edit</Link>
-        </div>
-
-        <div className={Style.main}>
-            <img src={props.entryProps.thumbnail} />
-
-            <div className={Style.info}>
-                <h4>{props.entryProps.datetime}</h4>
-                <h4>{props.entryProps.drinkName}</h4>
-                <h4>{props.entryProps.volume}</h4>
-            </div>
-
-            <div className={Style.statusFlags}>
-                { props.entryProps.alchoholic && <div className={Style.alcoholStatus}><i className="fa fa-cocktail"></i> Contains alcohol</div> }
-                { props.entryProps.caffeinated && <div className={Style.caffeinatedStatus}><i className="fa fa-coffee"></i> Contains caffeine</div> }
-            </div>
-        </div>
-    </div>
-)
-
+const mapStateToProps = (state) => {
+    return ({
+        platform: state.app.platform
+    })
+}
 
 const mapDispatchToProps = (dispatch) => {
     return {
+        setBackOption: (location, type) => {
+            dispatch(setBackOption(location, type))
+        },
         setNavOptions: (optionsArray) => {
             dispatch(setNavOptions(optionsArray))
         }
     }
 }
 
-export default withRouter(connect(null, mapDispatchToProps)(DiaryLog))
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(DiaryLog))

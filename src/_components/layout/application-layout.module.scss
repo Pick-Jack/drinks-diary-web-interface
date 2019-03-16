@@ -1,4 +1,6 @@
 @import '../../_helpers/style-mixins/colors';
+@import '../../_helpers/style-mixins/query-parameters';
+
 
 #desktopLayout {
     height: 100vh;
@@ -79,5 +81,18 @@
                 flex: 1 1 auto;
             }
         }
+    }
+}
+
+
+
+#mobileLayout {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    .page {
+        flex: 1 1 auto;
     }
 }

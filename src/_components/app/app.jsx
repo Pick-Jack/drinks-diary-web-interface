@@ -48,8 +48,8 @@ class App extends React.Component {
                 <Route key="2" path={"/createDiary"} component={DiaryCreationForm} />,
                 <Route key="3" path={"/diary/:diaryId"} component={DiaryView} />,
                 <Route key="4" path={"/logOut"} render={() => {this.props.submitLogOut(); return(<Redirect to="/" />)}} />,
-                <Route key="5" path={"/account/:accountId"} component={AccountView} />,
-                <Redirect key="5" from="/register" to="/" />
+                <Route key="5" exact path={"/account/:accountId"} component={AccountView} />,
+                <Redirect key="6" from="/register" to="/" />
             ]
         }
         else {
@@ -77,14 +77,10 @@ class App extends React.Component {
 }
 
 
-const mapStateToProps = (state) => {
-    return {
-        user: state.user,
-        platform: state.platform,
-        navOptions: state.navOptions.options,
-    }
-}
-
+const mapStateToProps = (state) => ({
+    user: state.user
+})
+    
 const mapDispatchToProps = (dispatch) => {
     return {
         setPlatformDesktop: (width) => {

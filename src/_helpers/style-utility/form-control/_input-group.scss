@@ -1,15 +1,33 @@
 
-.inputGroup {
-    width: 100%;
-    margin-bottom: 25px;
-
-    input {
+@media only screen and (min-width: $sm) {
+    .inputGroup {
         width: 100%;
-        display: block;
+        margin-bottom: 25px;
+    
+        input {
+            width: 100%;
+            display: block;
+        }
+    
+        label {
+            display: block;
+            font-weight: bold;
+        }
     }
+}
 
-    label {
-        display: block;
-        font-weight: bold;
+@media only screen and (max-width: $xs) {
+    .inputGroup {
+        width: 100%;
+    
+        input {
+            width: 100%;
+            display: block;
+        }
+    
+        label {
+            display: block;
+            font-weight: bold;
+        }
     }
 }

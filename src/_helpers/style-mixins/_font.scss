@@ -1,38 +1,44 @@
 
-h1 {
-    font-size: 33pt; 
+
+@import './query-parameters';
+
+// Desktop font size configuration
+@media only screen and (min-width: $sm) {
+
+    h1 { font-size: 33pt; }
+    
+    h2 { font-size: 26pt; }   
+    
+    h3 { font-size: 22pt; }  
+    
+    h4, h5 { font-size: 18pt; margin: 0; }
+    h4 { font-weight: 600; }
+    h5 { font-weight: 100; }
+    
+    h6, h7 { font-size: 15pt; margin: 0; }
+    h6 { font-weight: 600; }
+    h7 { font-weight: 100; }
+    
+    p, label { font-size: 1.15em; }
+    label { font-weight: 600; }
 }
 
-h2 {
-    font-size: 26pt;
-}   
+// Mobile font size configuration
+@media only screen and (max-width: $xs) {
+    h1 { font-size: 11vw; }
 
-h3 {
-    font-size: 22pt;
-}  
+    h2 { font-size: 9.5vw; }   
 
-h4 {
-    margin: 0;
-    font-size: 18pt;
-    font-weight: 600;
-}
+    h3 { font-size: 8.25vw; }  
 
-h5 { 
-    margin: 0;
-    font-size: 15pt; 
-    font-weight: 100; 
-}
+    h4, h5 { font-size: 7.5vw; margin: 0; }
+    h4 { font-weight: 600; }
+    h5 { font-weight: 100; }
 
-h6 {
-    margin: 0;
-    font-size: 12pt; 
-    font-weight: 100; 
-}
+    h6, h7 { font-size: 7vw; margin: 0; }
+    h6 { font-weight: 600; } 
+    h7 { font-weight: 100; }
 
-p, label {
-    font-size: 1.15em;
-}
-
-label {
-    font-weight: bold;
+    p, label { font-size: 1.15em; }
+    label { font-weight: 600; }
 }

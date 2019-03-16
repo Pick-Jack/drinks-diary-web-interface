@@ -1,0 +1,25 @@
+
+@import '../../_helpers/style-mixins/colors';
+
+.diaryEntry, %diaryEntry {
+    width: 90%;
+    padding: 7px;
+    display: block;
+    margin: 20px auto;
+
+    color: black;
+    text-decoration: none;
+    background-color: white;
+    box-shadow: -1px 0px 7px 5px rgba($theme-color, 0.2);
+
+    .info {
+        margin: 5px 0;
+        p {margin: 0;}
+    }
+}
+
+.diaryEntry:hover, %diaryEntry:hover {
+    color: black;
+    cursor: pointer;
+    background-color: $theme-color-transparent;
+}

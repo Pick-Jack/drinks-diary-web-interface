@@ -2,7 +2,7 @@
 @import '../../_helpers/style-mixins/colors';
 
 
-.diaryEntry {
+.desktopDiaryEntry {
     width: 250px;
     display: flex;
     
@@ -31,7 +31,51 @@
     }
 }
 
-.diaryEntry:hover {
+.desktopDiaryEntry:hover {
     cursor: pointer;
     box-shadow: -1px 0px 7px 5px rgba($theme-color, 0.5);
+}
+
+
+
+.mobileDiaryEntry {
+    width: 100%;
+    padding: 1vh 3vw;
+    box-sizing: border-box;
+
+    border-width: 0;
+    border-style: solid;
+    border-color: black;
+    border-bottom-width: 1px;
+
+    p { margin: 0; }
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .main {
+        display: flex;
+        align-items: center;
+        margin: 3vh 0;
+
+        img {
+            width: 10vh;
+            height: 10vh;
+            border-radius: 50%;
+            background-color: lightgray;
+            margin-right: 5vw;
+        }
+    }
+
+    .footer {
+        p {
+            margin-right: 5vw;
+            display: inline-block;
+        }
+    }
+    
+
+
 }

@@ -1,6 +1,8 @@
 // React Imports
 import React from 'react';
 import { Link } from 'react-router-dom';
+// Redux imports 
+import { connect } from 'react-redux';
 // Component Imports 
 import VolumeSelector from '../volume-selector';
 // Style Imports
@@ -38,7 +40,7 @@ class EntryForm extends React.Component {
 
     render() {
         return(
-            <form id={Style.createDiaryEntry} onSubmit={(event) => this.onSubmit(event)}>
+            <form id={Style.diaryEntryForm} onSubmit={(event) => this.onSubmit(event)}>
                 <h3>{this.props.formTitle}</h3>
                 
                 <div className={Style.formMain}>
@@ -81,17 +83,12 @@ class EntryForm extends React.Component {
                 </div>
 
                 <div className={Style.formOptions}>
-                    <Link to={`/diary/${this.props.match.params.id}`} className={ButtonStyle.buttonWarningSM}>Cancel</Link>
-                    <button type="submit" className={ButtonStyle.buttonSuccessSM}>Create Entry</button>
+                    <Link to={`/diary/${this.props.match.params.id}`} className={ButtonStyle.buttonWarningSM}><i className="fa fa-times"></i> Cancel</Link>
+                    <button type="submit" className={ButtonStyle.buttonSuccessSM}><i className="fa fa-plus"></i> Create Entry</button>
                 </div>
             </form>
         )
     }
 }
 
-
 export default EntryForm
-
-/*
-
-*/

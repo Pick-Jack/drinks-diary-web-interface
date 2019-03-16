@@ -1,13 +1,13 @@
 // React imports
 import React from 'react';
-// Router dependencies
+// Router imports
 import { Link } from 'react-router-dom';
-// Style dependencies
-import Style from './home.module.scss'
+// Style imports
+import Style from './diary-entry.module.scss';
 
 
-export const DesktopDiary = (props) => (
-    <Link to={`/diary/${props.id}`} className={Style.diary}>
+const DiaryEntry = (props) => (
+    <Link to={`/diary/${props.id}`} className={Style.diaryEntry}>
         <h4>{props.diaryName}</h4>
 
         <div className={Style.info}>
@@ -18,3 +18,5 @@ export const DesktopDiary = (props) => (
         <h5>{props.status}</h5>
     </Link>
 )
+
+export default DiaryEntry

@@ -4,7 +4,7 @@ import React from 'react'
 import { Link, withRouter } from 'react-router-dom'
 // Redux Imports
 import { connect } from 'react-redux';
-import { setNavOptions } from '../../_redux/actions/nav-options.actions';
+import { setBackOption, setNavOptions } from '../../_redux/actions/app.actions';
 import { flashMessage, messageTypes } from '../../_redux/actions/message-flash.actions';
 // Component imports
 import EntryForm from './entry-form'
@@ -13,13 +13,11 @@ import EntryForm from './entry-form'
 class EntryCreateForm extends React.Component {
     constructor(props) {
         super(props)
-    }
 
-    componentDidMount() {
+        // Set back option 
+        this.props.setBackOption(`/diary/${this.props.match.params.id}`)
         // Set the sidebar navigation options
-        this.props.setNavOptions([
-            (<Link to={`/diary/${this.props.match.params.id}`}><i className="fa fa-arrow-left"></i> Back</Link>),
-        ])
+        this.props.setNavOptions([])
     }
 
     onSubmit = (formValues) => {
@@ -35,6 +33,9 @@ class EntryCreateForm extends React.Component {
 
 const mapDispatchToProps = (dispatch) => {
     return {
+        setBackOption: (location, type) => {
+            dispatch(setBackOption(location, type))
+        },
         setNavOptions: (optionsArray) => {
             dispatch(setNavOptions(optionsArray))
         },

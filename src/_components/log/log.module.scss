@@ -62,3 +62,40 @@
         }
     }
 }
+
+
+
+.mobileLogView {
+    margin-top: 5vh;
+
+    .viewOptions {
+        padding: 1vh 2vw;
+        display: flex;
+        justify-content: space-between;
+
+        button {
+            width: 30vw;
+        }
+    }
+    
+    .logView {
+        border-width: 0;
+        border-style: solid;
+        border-color: black;
+        border-top-width: 1px;
+
+        .logDate {
+            display: flex;
+            justify-content: center;
+
+            border-width: 0;
+            border-style: inherit;
+            border-color: inherit;
+            border-bottom-width: 1px;
+        }
+
+        .logMain {
+            
+        }
+    }
+}

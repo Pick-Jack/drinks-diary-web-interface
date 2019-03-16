@@ -1,0 +1,46 @@
+@import '../../_helpers/style-mixins/colors';
+
+.diaryExpand {
+    width: 250px;
+    height: calc(100% - 39px);
+    background-color: $theme-color-transparent;
+    box-sizing: border-box;
+    padding: 10px 15px;
+
+    .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .close {
+            font-size: 2.25em;
+        }
+        .close:hover {
+            opacity: 0.65;
+            cursor: pointer; 
+        }
+    }
+
+    .main {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+
+        img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: lightgray;
+            margin: 50px 0;
+        }
+
+        .info {
+            margin: 20px 0;
+        }
+
+        .statusFlags {
+            margin: 20px 0;
+            font-size: 1.15em;
+        }
+    }
+}

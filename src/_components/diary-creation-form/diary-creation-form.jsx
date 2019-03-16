@@ -4,7 +4,8 @@ import React from 'react';
 import { withRouter, Link } from 'react-router-dom';
 // Redux imports
 import { connect } from 'react-redux';
-import { setNavOptions } from '../../_redux/actions/nav-options.actions';
+import { OptionTypes } from '../../_helpers/enums';
+import { setBackOption, setNavOptions } from '../../_redux/actions/app.actions';
 // API function imports
 import { createDiary } from '../../_services/diary.service';
 // Style imports
@@ -12,6 +13,8 @@ import Style from './diary-creation-form.module.scss';
 import ButtonStyle from '../../_helpers/style-utility/buttons.module.scss';
 import FormStyle from '../../_helpers/style-utility/form-control.module.scss';
 import { EventEmitter } from 'events';
+import { UnexpectedPlatformError } from '../../_helpers/errors';
+
 
 
 class DiaryCreationForm extends React.Component {
@@ -19,9 +22,8 @@ class DiaryCreationForm extends React.Component {
     constructor(props) {
         super(props)
 
-        this.props.setNavOptions([
-            (<Link to={`/`}><i className="fa fa-arrow-left"></i> Back</Link>),
-        ])
+        // Set back location option
+        this.props.setBackOption('/', OptionTypes.back)
 
         this.state = {
             values: {
@@ -70,14 +72,24 @@ class DiaryCreationForm extends React.Component {
             response = createDiary(this.props.user, null,
                 this.state.values.diaryName, startDate, endDate)
         }
-        console.log(response)
 
         this.props.history.push("/")
     }
 
     render() {
+        var className;
+        if (this.props.platform === "DESKTOP") {
+            className = Style.desktopDiaryCreationForm
+        }
+        else if (this.props.platform === "MOBILE") {
+            className = Style.mobileDiaryCreationForm
+        }
+        else {
+            throw new UnexpectedPlatformError(this.props.platform, this.constructor.name)
+        }
+
         return(
-            <div id={Style.diaryCreationForm}>
+            <div id={className}>
                 <h2>Create Drinks Diary</h2>
 
                 <form onSubmit={(event) => this.handleSubmit(event)}>
@@ -114,7 +126,6 @@ class DiaryCreationForm extends React.Component {
                         <Link to={"/"} className={ButtonStyle.buttonWarningSM}><i className="fa fa-times"></i> Cancel</Link>
                         <button type="submit" className={ButtonStyle.buttonSuccessSM}><i className="fa fa-plus"></i> Create Diary</button>
                     </div>
-
                 </form> 
             </div>
         )
@@ -124,12 +135,15 @@ class DiaryCreationForm extends React.Component {
 const mapStateToProps = (state) => {
     return {
         user: state.user,
-        platform: state.platform,
+        platform: state.app.platform,
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
+        setBackOption: (location, type) => {
+            dispatch(setBackOption(location, type))
+        },
         setNavOptions: (optionsArray) => {
             dispatch(setNavOptions(optionsArray))
         }

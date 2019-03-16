@@ -5,7 +5,9 @@
 
 %button-base, .button {
     width: auto;
-    display: inline-block;
+    align-items: center;
+    display: inline-flex;
+    justify-content: center;
     box-sizing: content-box;
     
     text-align: center;
