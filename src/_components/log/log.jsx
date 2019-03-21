@@ -10,17 +10,46 @@ import { UnexpectedPlatformError } from '../../_helpers/errors';
 
 class Log extends React.Component {
 
+    constructor(props) {
+        super(props)
+        this.state = {
+            nextEnabled: true,
+            prevEnabled: true 
+        }
+    }
+
+    componentDidMount() {
+        this.setState({
+            nextEnabled: (this.props.activeDate < this.props.endDate),
+            prevEnabled: (this.props.activeDate > this.props.startDate)
+        })
+    }
+
+    getDisplayDate = () => {
+        if (this.props.activeDate) {
+            // Format date string for display
+            var dateString = `${this.props.activeDate.getDate()}-${this.props.activeDate.getMonth()}-${this.props.activeDate.getFullYear()}`
+            // Display today for current date
+            if (this.props.activeDate === new Date()) { return `Today (${dateString})` } 
+            else { return dateString }
+        }
+    }
+
     MobileLogView = (props) => (
         <div className={Style.mobileLogView}>
 
             <div className={Style.viewOptions}>
-                <button className={ButtonStyle.buttonXS}><i className="fa fa-arrow-left"></i> Previous</button>
-                <button className={ButtonStyle.buttonXS}>Next <i className="fa fa-arrow-right"></i></button>
+                <button className={ButtonStyle.buttonXS} onClick={this.props.onPrev} disabled={this.state.prevEnabled}>
+                    <i className="fa fa-arrow-left"></i> Previous
+                </button>
+                <button className={ButtonStyle.buttonXS} onClick={this.props.onNext} disabled={this.state.nextEnabled}>
+                    Next <i className="fa fa-arrow-right"></i>
+                </button>
             </div>
 
             <div className={Style.logView}>
                 <div className={Style.logDate}>
-                    <h5>10/05/2019</h5>
+                    <h5>{this.getDisplayDate()}</h5>
                 </div>
 
                 <div className={Style.logMain}>
@@ -32,18 +61,8 @@ class Log extends React.Component {
 
     singleLogView = (props) => (
         <div className={Style.singleLogView}>
-            <div className={Style.logDate}>
-                <div className={Style.prev}>
-                    <i className="fa fa-chevron-left"></i>
-                    <i className="fa fa-chevron-left"></i>
-                </div>
-                
-                <h4>10/05/2019</h4>
-
-                <div className={Style.next}>
-                    <i className="fa fa-chevron-right"></i>
-                    <i className="fa fa-chevron-right"></i>
-                </div>
+            <div className={Style.logDate}>  
+                <h4>{this.getDisplayDate()}</h4>
             </div>
     
             <div className={Style.logMain}>
@@ -58,18 +77,26 @@ class Log extends React.Component {
             return (
                 <div className={Style.log}>
                     <div className={Style.logActions}>
+                        <button className={ButtonStyle.buttonSM} onClick={this.props.onPrev} disabled={this.state.prevEnabled}>
+                            <i className="fa fa-arrow-left"></i> Previous
+                        </button>
+
                         <div className={Style.displayOptions}>
                             <button className={ButtonStyle.buttonXS}><i className="fa fa-calendar-day"></i></button>
                             <button className={ButtonStyle.buttonXS}><i className="fa fa-calendar-week"></i></button>
                         </div>
+
+                        <button className={ButtonStyle.buttonSM} onClick={this.props.onNext} disabled={this.state.nextEnabled}>
+                            Next <i className="fa fa-arrow-right"></i>
+                        </button>
                     </div>
 
-                    <LogView>{this.props.children}</LogView>
+                    <LogView>{this.props.entries}</LogView>
                 </div>
             )
         }
         else if (this.props.platform === "MOBILE") {
-            return (<this.MobileLogView>{this.props.children}</this.MobileLogView>)
+            return (<this.MobileLogView>{this.props.entries}</this.MobileLogView>)
         }
         else {
             throw new UnexpectedPlatformError(this.props.platform, this.constructor.name)

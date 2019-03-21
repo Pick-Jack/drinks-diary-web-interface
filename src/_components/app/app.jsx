@@ -8,7 +8,8 @@ import { setPlatformDesktop, setPlatformMobile } from '../../_redux/actions/app.
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 // Component dependencies
 import Layout from '../layout';
-import ErrorBoundary from '../error-boundary'
+import { SecureRoute } from '../routes';
+import ErrorBoundary from '../error-boundary';
 
 import LoginForm from '../login-form'
 import RegistrationForm from '../registration-form'
@@ -21,13 +22,14 @@ import DiaryCreationForm from '../diary-creation-form';
 import Style from './app.module.scss';
 
 
+
 class App extends React.Component {
 
     componentDidMount() {
         window.addEventListener('resize', this.onWindowResize)
         this.onWindowResize()
     }
-      
+
     componentWillUnmount() {
         window.removeEventListener('resize', this.onWindowResize)
     }
@@ -44,18 +46,20 @@ class App extends React.Component {
         var RouteSet
         if (this.props.user.isAuthorised) {
             RouteSet = [
-                <Route key="1" exact path="/" component={Home} />,
-                <Route key="2" path={"/createDiary"} component={DiaryCreationForm} />,
-                <Route key="3" path={"/diary/:diaryId"} component={DiaryView} />,
-                <Route key="4" path={"/logOut"} render={() => {this.props.submitLogOut(); return(<Redirect to="/" />)}} />,
-                <Route key="5" exact path={"/account/:accountId"} component={AccountView} />,
-                <Redirect key="6" from="/register" to="/" />
+                <SecureRoute exact={true} key="/" path="/" component={Home} />,
+                <SecureRoute exact={true} key="/account" path={"/account"} component={AccountView} />,
+                <SecureRoute key="/createDiary" path={"/createDiary"} component={DiaryCreationForm} />,
+                
+                <Route key="/logOut" path={"/logOut"} render={() => {this.props.submitLogOut(); return(<Redirect to="/" />)}} />,
+                <Route key="/diary/:diaryId" path={"/diary/:diaryId"} component={DiaryView} />,
+                <Redirect key="/register" from="/register" to="/" />
             ]
         }
         else {
             RouteSet = [
-                <Route key="1" exact path="/" component={LoginForm} />,
-                <Route key="2" exact path="/register" component={RegistrationForm} />,
+                <Route key="/" exact path="/" component={LoginForm} />,
+                <Route key="/register" exact path="/register" component={RegistrationForm} />,
+                <Redirect key="redirectLogin" to="/" />
             ]
         }
 

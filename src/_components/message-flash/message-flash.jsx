@@ -4,7 +4,8 @@ import React from 'react'
 import { withRouter } from 'react-router-dom'
 // Redux imports
 import { connect } from 'react-redux'
-import { messageTypes, hideMessage } from '../../_redux/actions/message-flash.actions'
+import { MessageTypes } from '../../_helpers/enums'
+import { hideMessage } from '../../_redux/actions/message-flash.actions'
 // Style imports
 import Style from './message-flash.module.scss'
 import { isNull } from 'util';
@@ -41,10 +42,10 @@ class MessageFlash extends React.Component {
         var flashStyle = Style.messageFlashHide
         if (!isNull(this.props.displayMessage)) {
             switch(this.props.displayType) {
-                case(messageTypes.warning):
+                case(MessageTypes.warning):
                     flashStyle = Style.messageFlashWarning
                     break;
-                case (messageTypes.error):
+                case (MessageTypes.error):
                     flashStyle = Style.messageFlashDanger
                     break;
                 default:

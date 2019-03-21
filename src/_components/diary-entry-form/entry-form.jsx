@@ -16,14 +16,18 @@ class EntryForm extends React.Component {
     constructor(props) {
         super(props)
         
-        this.state = {}
+        this.state = {
+            drinkName: "",
+            alcoholic: "",
+            caffeinated: "",
+            volume: {amount: "", measurement: ""}
+        }   
+    }
+
+    componentDidMount() {
+        console.log(this.props.state)
         if (this.props.state) {
-            this.state = {...this.state, ...this.props.state}
-        } else {
-            this.state.drinkName = ""    
-            this.state.alcoholic = ""
-            this.state.caffeinated = ""
-            this.state.volume = {amount: "", measurement: ""}
+            this.setState = {...this.props.state}
         }
     }
 
@@ -33,12 +37,17 @@ class EntryForm extends React.Component {
         this.setState(newState)
     }
 
+    onChangeVolume = (newState) => {
+        this.setState({volume: newState})
+    }
+
     onSubmit = (event) => {
         event.preventDefault()
         this.props.onSubmit(this.state)
     }
 
     render() {
+        console.log(this.state)
         return(
             <form id={Style.diaryEntryForm} onSubmit={(event) => this.onSubmit(event)}>
                 <h3>{this.props.formTitle}</h3>
@@ -50,19 +59,19 @@ class EntryForm extends React.Component {
                         <div className={FormStyle.inputGroup}>
                             <label>Drink:</label>
                             <input className={FormStyle.input} type="text" placeholder="drink name..." value={this.state.drinkName} 
-                            onChange={(event) => this.onChangeInput(event, "drinkName")} />
+                            onChange={(event) => this.onChangeInput(event, "drinkName")} required />
                         </div>
                         
                         <div className={FormStyle.inputGroup}>
                             <label>Volume:</label>
-                            <VolumeSelector onChange={this.onChangeInput} value={this.state.volume} />
+                            <VolumeSelector onChange={this.onChangeVolume} value={this.state.volume} required={true} />
                         </div>
 
                         <div className={FormStyle.inputRow}>
                             <div className={FormStyle.inputGroup}>
                                 <label>Contains Alcohol:</label>
                                 <select className={FormStyle.input} value={this.state.alcoholic} 
-                                onChangeInput={(event) => this.onChangeInput(event, "alcoholic")}>
+                                onChange={(event) => this.onChangeInput(event, "alcoholic")}>
                                     <option value="" disabled>-- select an option --</option>
                                     <option value={false}>Non-alcoholic</option>
                                     <option value={true}>Alcoholic</option>
@@ -72,7 +81,7 @@ class EntryForm extends React.Component {
                             <div className={FormStyle.inputGroup}>
                                 <label>Contains Caffeine:</label>
                                 <select className={FormStyle.input} value={this.state.caffeinated} 
-                                onChangeInput={(event) => this.onChangeInput(event, "caffeinated")}>
+                                onChange={(event) => this.onChangeInput(event, "caffeinated")}>
                                     <option value="" disabled>-- select an option --</option>
                                     <option value={false}>Decaf</option>
                                     <option value={true}>Caffeinated</option>
@@ -83,7 +92,7 @@ class EntryForm extends React.Component {
                 </div>
 
                 <div className={Style.formOptions}>
-                    <Link to={`/diary/${this.props.match.params.id}`} className={ButtonStyle.buttonWarningSM}><i className="fa fa-times"></i> Cancel</Link>
+                    <Link to={`/diary/${this.props.diaryId}`} className={ButtonStyle.buttonWarningSM}><i className="fa fa-times"></i> Cancel</Link>
                     <button type="submit" className={ButtonStyle.buttonSuccessSM}><i className="fa fa-plus"></i> Create Entry</button>
                 </div>
             </form>

@@ -16,7 +16,7 @@ const DiaryEntry = (props) => {
             <div className={Style.desktopDiaryEntry} onClick={() => props.onClick(true, props)}>
                 <div className={Style.entryLeft}>
                     <img src={props.thumbnail}/>
-                    <h6>{props.datetime}</h6>     
+                    <h6>{`${props.datetime.getHours()}:${props.datetime.getMinutes()}`}</h6>     
                 </div>
 
                 <h4>{props.drinkName}</h4>
@@ -27,7 +27,7 @@ const DiaryEntry = (props) => {
         return (
             <div className={Style.mobileDiaryEntry}>
                 <div className={Style.header}>
-                    <p className={Style.time}>{props.datetime}</p>
+                    <p className={Style.time}>{`${props.datetime.getHours()}:${props.datetime.getMinutes()}`}</p>
                     <Link to={`${props.match.url}/edit`} className={ButtonStyle.buttonXS}><i className="fa fa-pencil-alt"></i> Edit</Link>
                 </div>
                 <div className={Style.main}>

@@ -17,7 +17,6 @@ class ApplicationLayout extends React.Component {
     render() {
         // Render layout dependent on platform
         if (this.props.platform === "DESKTOP") {
-            console.log(this.props.backOption)
             return (
                 <div id={Style.desktopLayout}>
                     <Header />

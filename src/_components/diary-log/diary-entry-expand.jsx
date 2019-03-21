@@ -12,14 +12,14 @@ const DiaryEntryExpand = (props) => (
 
         <div className={Style.header}>
             <a onClick={ () => props.hide(false, {}) } className={Style.close}><i className="fa fa-times"></i></a>
-            <Link to={`${props.match.url}/edit`} className={ButtonStyle.buttonSM}><i className="fa fa-pencil-alt"></i> Edit</Link>
+            <button onClick={() => props.onEdit(props.entryProps.entryId)} className={ButtonStyle.buttonSM}><i className="fa fa-pencil-alt"></i> Edit</button>
         </div>
 
         <div className={Style.main}>
             <img src={props.entryProps.thumbnail} />
 
             <div className={Style.info}>
-                <h4>{props.entryProps.datetime}</h4>
+                <h4>{`${props.entryProps.datetime.getHours()}:${props.entryProps.datetime.getMinutes()}`}</h4>
                 <h4>{props.entryProps.drinkName}</h4>
                 <h4>{props.entryProps.volume}</h4>
             </div>

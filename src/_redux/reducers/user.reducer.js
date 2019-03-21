@@ -1,20 +1,22 @@
 
 var initialState = {isAuthorised: false}
-var userDoc = JSON.parse(localStorage.getItem('user'));
-if (userDoc) {
-    initialState = { ...userDoc, isAuthorised: true }
+var authToken = localStorage.getItem('authToken');
+if (authToken) {
+    initialState = { authToken, isAuthorised: true }
 } 
 
 export function user(state=initialState, action) {
     switch(action.type) {
-        
         case "LOGIN-SUCCESS":
-            return {...state, ...action.payload, isAuthorised: true}
-
-        case "LOGIN-FAILED":
-            return {isAuthorised: false}
+            return {
+                ...state, 
+                authToken: action.payload, 
+                isAuthorised: true
+            }
 
         case "LOG-OUT":
+        case "LOGIN-FAILED":
+        case "AUTHENTICATION-FAILED": 
             return {isAuthorised: false}
 
         default:

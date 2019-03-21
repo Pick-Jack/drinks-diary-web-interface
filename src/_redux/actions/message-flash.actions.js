@@ -1,12 +1,7 @@
 
-export const messageTypes = Object.freeze({
-    default: "default",
-    warning: "warning",
-    error: "error"
-})
+import { MessageTypes } from '../../_helpers/enums';
 
-
-export function flashMessage(message, type=messageTypes.default) {
+export function flashMessage(message, type=MessageTypes.default) {
     return {type: "FLASH_MESSAGE",payload: {type, message}}
 }
 

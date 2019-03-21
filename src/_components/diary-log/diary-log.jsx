@@ -4,6 +4,7 @@ import { Link, withRouter } from 'react-router-dom';
 // Redux Imports
 import { connect } from 'react-redux';
 import { setBackOption, setNavOptions } from '../../_redux/actions/app.actions.js';
+import { updateActiveDate, updateActiveEntry } from '../../_redux/actions/diary.actions';
 // Error imports
 import { UnexpectedPlatformError } from '../../_helpers/errors'
 // Component imports
@@ -29,48 +30,117 @@ class DiaryLog extends React.Component {
         ])
    
         this.state = {
+            nextEnabled: true,
+            prevEnabled: true,
             displayExpand: false,
             entryProps: {}
         }
     }
 
-    componentDidMount() {
-        // TODO: fetch diary enties from API
+    generateDiaryEntries = () => {
+        var entries = [];
+        // Check entries have been successfully retrieved
+        if (this.props.diaryEntries && this.props.diaryActiveDate){
+            const entryKeys = Object.keys(this.props.diaryEntries)
+            for (var i = 0; i < entryKeys.length; i++) {
+                const entry = this.props.diaryEntries[entryKeys[i]]
+                entry.date = new Date(entry.date)
+
+                // Check diary entry is within the active date
+                if (entry.date.getDate() === this.props.diaryActiveDate.getDate() &&
+                    entry.date.getMonth() === this.props.diaryActiveDate.getMonth() &&
+                    entry.date.getFullYear() === this.props.diaryActiveDate.getFullYear()) {
+                    entries.push((
+                        <DiaryEntry 
+                            key={i}
+                            datetime={entry.date} 
+                            entryId={entry._id}
+                            thumbnail={defaultDrink} 
+                            drinkName={entry.drinkType} 
+                            alchoholic={entry.alchoholic} 
+                            caffeinated={entry.caffeinated} 
+                            volume={`${entry.volume.amount} ${entry.volume.measure}`} 
+                            onClick={this.displayExpand} 
+                            match={this.props.match}
+                        />
+                    ))
+                }
+            }        
+        }
+        return entries
+    }
+
+    navToEditEntry = (entryId) => {
+        this.props.updateActiveEntry(entryId)
+        this.props.history.push(`/diary/${this.props.diaryInfo.diaryId}/edit`)
     }
 
     displayExpand = (display=false, entryProps={}) => {
         this.setState({displayExpand: display, entryProps: entryProps})
     }
 
+    handleNextPage = () => {
+        console.log(true)
+        // Check current date is not completion date
+        if (this.props.diaryActiveDate < this.props.diaryInfo.endDate) {
+            // Increment date
+            var nextDay = this.props.diaryActiveDate
+            nextDay.setDate(nextDay.getDate() + 1);
+            this.props.updateActiveDate(nextDay)
+        }
+    }
+
+    handlePrevPage = () => {
+        // Check current date is not completion date
+        if (this.props.diaryActiveDate > this.props.diaryInfo.startDate) {
+            // Decrement date
+            var prevDay = this.props.diaryActiveDate
+            prevDay.setDate(prevDay.getDate() - 1);
+            this.props.updateActiveDate(prevDay)
+        }
+    }
+
     render() {
         if (this.props.platform === "DESKTOP") {
             return (
                 <div className={Style.desktopDiaryLog}>
-                    <Log>
-                        <DiaryEntry onClick={this.displayExpand} drinkName={"Black Coffee"} volume={"1 Cup"} datetime={"15:15"} 
-                                thumbnail={defaultDrink} alchoholic={false} caffeinated={true} />
-                        <DiaryEntry onClick={this.displayExpand} drinkName={"Black Coffee"} volume={"1 Cup"} datetime={"15:15"} 
-                                thumbnail={defaultDrink} alchoholic={false} caffeinated={true} />
-                        <DiaryEntry onClick={this.displayExpand} drinkName={"Black Coffee"} volume={"1 Cup"} datetime={"15:15"} 
-                                thumbnail={defaultDrink} alchoholic={false} caffeinated={true} />
-                    </Log>
-                    { this.state.displayExpand && <DiaryEntryExpand match={this.props.match} entryProps={this.state.entryProps} hide={this.displayExpand} /> }
+                    <Log 
+                        startDate={this.props.diaryInfo.startDate}
+                        activeDate={this.props.diaryActiveDate}
+                        endDate={this.props.diaryInfo.endDate}
+                        onNext={this.handleNextPage}
+                        onPrev={this.handlePrevPage}
+                        entries={this.generateDiaryEntries()}
+                    />
+                    { 
+                        this.state.displayExpand && 
+                        <DiaryEntryExpand 
+                            match={this.props.match} 
+                            entryProps={this.state.entryProps} 
+                            onEdit={this.navToEditEntry}
+                            hide={this.displayExpand} 
+                        /> 
+                    }
                 </div>
             )
         }
         else if (this.props.platform === "MOBILE") {
             return (
                 <div className={Style.mobileDiaryLog}>
-                    <Log>
-                        <DiaryEntry match={this.props.match} onClick={this.displayExpand} 
-                        drinkName={"Black Coffee"} volume={"1 Cup"} datetime={"15:15"} thumbnail={defaultDrink} 
-                        alchoholic={false} caffeinated={true} />
-
-                        <Link to={`${this.props.match.url}/create`} className={Style.newEntryOption}>
-                            <h6><i className="fa fa-plus"></i></h6>
-                            <label>New Entry</label>
-                        </Link>
-                    </Log>
+                    <Log 
+                        startDate={this.props.diaryInfo.startDate}
+                        activeDate={this.props.diaryActiveDate}
+                        endDate={this.props.diaryInfo.endDate}
+                        onNext={this.handleNextPage}
+                        onPrev={this.handlePrevPage}
+                        entries={this.generateDiaryEntries()}
+                    />
+    
+                    <Link to={`${this.props.match.url}/create`} className={Style.newEntryOption}>
+                        <h6><i className="fa fa-plus"></i></h6>
+                        <label>New Entry</label>
+                    </Link>
+           
                 </div>
             )
         }
@@ -83,7 +153,11 @@ class DiaryLog extends React.Component {
 
 const mapStateToProps = (state) => {
     return ({
-        platform: state.app.platform
+        platform: state.app.platform,
+        user: state.user,
+        diaryInfo: state.diary.info,
+        diaryEntries: state.diary.entries,
+        diaryActiveDate: state.diary.activeDate
     })
 }
 
@@ -94,6 +168,12 @@ const mapDispatchToProps = (dispatch) => {
         },
         setNavOptions: (optionsArray) => {
             dispatch(setNavOptions(optionsArray))
+        },
+        updateActiveDate: (newDate) => {
+            dispatch(updateActiveDate(newDate))
+        },
+        updateActiveEntry: (entryId) => {
+            dispatch(updateActiveEntry(entryId))
         }
     }
 }

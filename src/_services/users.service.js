@@ -17,15 +17,7 @@ export function login(email, password) {
     };
 
     // Submit verification request to API
-    var fetchPromise = fetch(`${process.env.REACT_APP_API_URL}/users/verifyCredentials`, requestOptions)
-    return fetchPromise.then(
-        response => {
-            return response.json()
-        },
-        error => {
-            throw error
-        }
-    )
+    return fetch(`${process.env.REACT_APP_API_URL}/users/verifyCredentials`, requestOptions)
 }
 
 
@@ -59,4 +51,19 @@ export function register(args) {
             throw error
         }
     )
+}
+
+
+/**
+ * Checks the authenticty of the clients API authentication token
+ * @param {String} token is the authentication token to check
+ * @returns {Promise} resolves to the API response
+ */
+export function checkAuthorisation(token) {
+    const method = "GET"
+    const headers = { 'Authorization': `Bearer ${token}`}
+    const url = `${process.env.REACT_APP_API_URL}/users/verifyToken`
+
+    // Submit request to API
+    return fetch(url, {method, headers})
 }
