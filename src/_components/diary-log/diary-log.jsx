@@ -10,11 +10,11 @@ import { UnexpectedPlatformError } from '../../_helpers/errors'
 // Component imports
 import Log from '../log';
 import DiaryEntry from './diary-entry';
-import DiaryEntryExpand from './diary-entry-expand'
 // Image imports
 import defaultDrink from '../../_images/default_drink.svg';
 // Style Imports
 import Style from './diary-log.module.scss';
+import EntryStyle from './diary-entry.module.scss';
 
 
 class DiaryLog extends React.Component {
@@ -30,10 +30,18 @@ class DiaryLog extends React.Component {
         ])
    
         this.state = {
+            expandedEntry: "",
             nextEnabled: true,
             prevEnabled: true,
-            displayExpand: false,
             entryProps: {}
+        }
+    }
+
+    toggleEntryExpand = (entryId) => {
+        if (entryId === this.state.expandedEntry){
+            this.setState({expandedEntry: ""})
+        } else {
+            this.setState({expandedEntry: entryId})
         }
     }
 
@@ -46,6 +54,9 @@ class DiaryLog extends React.Component {
                 const entry = this.props.diaryEntries[entryKeys[i]]
                 entry.date = new Date(entry.date)
 
+                // Toggle expanded status
+                var expanded = (this.state.expandedEntry === entry._id)
+
                 // Check diary entry is within the active date
                 if (entry.date.getDate() === this.props.diaryActiveDate.getDate() &&
                     entry.date.getMonth() === this.props.diaryActiveDate.getMonth() &&
@@ -57,11 +68,12 @@ class DiaryLog extends React.Component {
                             entryId={entry._id}
                             thumbnail={defaultDrink} 
                             drinkName={entry.drinkType} 
-                            alchoholic={entry.alchoholic} 
+                            alcoholic={entry.alcoholic} 
                             caffeinated={entry.caffeinated} 
                             volume={`${entry.volume.amount} ${entry.volume.measure}`} 
-                            onClick={this.displayExpand} 
+                            onClick={this.toggleEntryExpand} 
                             match={this.props.match}
+                            expanded={expanded}
                         />
                     ))
                 }
@@ -70,7 +82,7 @@ class DiaryLog extends React.Component {
         return entries
     }
 
-    navToEditEntry = (entryId) => {
+    onEditEntry = (entryId) => {
         this.props.updateActiveEntry(entryId)
         this.props.history.push(`/diary/${this.props.diaryInfo.diaryId}/edit`)
     }
@@ -80,7 +92,6 @@ class DiaryLog extends React.Component {
     }
 
     handleNextPage = () => {
-        console.log(true)
         // Check current date is not completion date
         if (this.props.diaryActiveDate < this.props.diaryInfo.endDate) {
             // Increment date
@@ -111,16 +122,12 @@ class DiaryLog extends React.Component {
                         onNext={this.handleNextPage}
                         onPrev={this.handlePrevPage}
                         entries={this.generateDiaryEntries()}
-                    />
-                    { 
-                        this.state.displayExpand && 
-                        <DiaryEntryExpand 
-                            match={this.props.match} 
-                            entryProps={this.state.entryProps} 
-                            onEdit={this.navToEditEntry}
-                            hide={this.displayExpand} 
-                        /> 
-                    }
+                    >
+                        <Link to={`/diary/${this.props.diaryInfo.diaryId}/create`} className={EntryStyle.diaryEntryCreate}>
+                            <i className="fa fa-plus"></i>
+                            <h5>Create Entry</h5>
+                        </Link>
+                    </Log>
                 </div>
             )
         }

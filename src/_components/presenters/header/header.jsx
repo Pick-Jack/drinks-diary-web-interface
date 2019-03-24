@@ -18,7 +18,7 @@ const Header = (props) => {
 
                 <div className={Style.headerMenu}>
                     <img className={Style.profilePicture} src={profile} />
-                    <Link to={{pathname: "/account/id", state: {prevLocation: props.location.pathname}}} className={Style.headerButton}>
+                    <Link to={{pathname: "/account", state: {prevLocation: props.location.pathname}}} className={Style.headerButton}>
                         <i className="fa fa-user-cog"></i>
                     </Link>
 
@@ -44,7 +44,7 @@ const Header = (props) => {
                         <i className="fa fa-arrow-left"></i>
                     </Link>
                 }
-                <Link to={{pathname: "/account/id", state: {prevLocation: props.location.pathname}}} className={Style.headerButton}>
+                <Link to={{pathname: "/account", state: {prevLocation: props.location.pathname}}} className={Style.headerButton}>
                     <i className="fa fa-user-cog"></i>
                 </Link>
                 <a className={Style.headerButton}><i className="fa fa-question"></i></a>

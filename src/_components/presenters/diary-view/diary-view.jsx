@@ -12,6 +12,7 @@ import DiaryLog from '../../diary-log';
 import { CreateEntryForm, EditEntryForm } from '../../diary-entry-form'
 // Style Imports
 import Style from './diary-view.module.scss';
+import StatusStyle from '../../../_helpers/style-utility/status-indicator.module.scss'
 
 
 class DiaryView extends React.Component {
@@ -51,7 +52,12 @@ class DiaryView extends React.Component {
                 <div id={Style.desktopDiaryView}>
                     <div className={Style.viewHeader}>
                         <h1>{this.props.diaryInfo.diaryName}</h1>
-                        <h3>{this.props.diaryInfo.status}</h3>
+
+                        <div className={StatusStyle.statusIndicator}>
+                            <div className={StatusStyle.iconSuccess}></div>
+                            <h3>{this.props.diaryInfo.status}</h3>
+                        </div>
+
                     </div>
                     
                     <div className={Style.viewContent}><Routes /></div>

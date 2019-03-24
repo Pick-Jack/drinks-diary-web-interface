@@ -20,14 +20,21 @@ class EntryForm extends React.Component {
             drinkName: "",
             alcoholic: "",
             caffeinated: "",
-            volume: {amount: "", measurement: ""}
+            volume: {amount: "", measure: ""}
         }   
     }
 
     componentDidMount() {
-        console.log(this.props.state)
-        if (this.props.state) {
-            this.setState = {...this.props.state}
+        if (this.props.formValues) {
+            this.setState({
+                drinkName: this.props.formValues.drinkType,
+                alcoholic: this.props.formValues.alcoholic,
+                caffeinated: this.props.formValues.caffeinated,
+                volume: {
+                    amount: this.props.formValues.volume.amount, 
+                    measure: this.props.formValues.volume.measure
+                }
+            })
         }
     }
 
@@ -47,7 +54,6 @@ class EntryForm extends React.Component {
     }
 
     render() {
-        console.log(this.state)
         return(
             <form id={Style.diaryEntryForm} onSubmit={(event) => this.onSubmit(event)}>
                 <h3>{this.props.formTitle}</h3>
@@ -64,7 +70,12 @@ class EntryForm extends React.Component {
                         
                         <div className={FormStyle.inputGroup}>
                             <label>Volume:</label>
-                            <VolumeSelector onChange={this.onChangeVolume} value={this.state.volume} required={true} />
+                            <VolumeSelector 
+                                onChange={this.onChangeVolume} 
+                                volume={this.state.volume.amount}
+                                measurement={this.state.volume.measure} 
+                                required={true} 
+                            />
                         </div>
 
                         <div className={FormStyle.inputRow}>
@@ -92,8 +103,7 @@ class EntryForm extends React.Component {
                 </div>
 
                 <div className={Style.formOptions}>
-                    <Link to={`/diary/${this.props.diaryId}`} className={ButtonStyle.buttonWarningSM}><i className="fa fa-times"></i> Cancel</Link>
-                    <button type="submit" className={ButtonStyle.buttonSuccessSM}><i className="fa fa-plus"></i> Create Entry</button>
+                    {this.props.formOptions}
                 </div>
             </form>
         )

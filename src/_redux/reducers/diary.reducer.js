@@ -31,6 +31,10 @@ export function diary(state=defaultState, action) {
                 activeEntryId: action.payload
             }
 
+        case "UNSET-ACTIVE-ENTRY":
+            delete state.activeEntryId
+            return { ...state }
+
         case "UPDATE-DIARY-ENTRIES":
             const entries = update(state.entries, {
                 [action.payload.entry._id]: {$set: action.payload.entry}

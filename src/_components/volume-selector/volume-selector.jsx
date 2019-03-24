@@ -7,11 +7,18 @@ class VolumeSelector extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            formValues: {
-                value: "",
-                measure: ""
-            },
+            volume: this.props.volume, 
+            measurement: this.props.measurement,
             measurementOptions: []
+        }
+    }
+
+    componentDidUpdate(prevProps) {
+        if (prevProps !== this.props) {
+            this.setState({
+                volume: this.props.volume,
+                measurement: this.props.measurement
+            })
         }
     }
 
@@ -22,12 +29,15 @@ class VolumeSelector extends Component {
             {value: "ml", display: "Milliliters"},
             {value: "oz", display: "Ounces"},
         ]
-        this.setState({measurementOptions: measurements.map((option, index) => (
+        
+        var measurementOptions = measurements.map((option, index) => (
             <option key={index} value={option.value}>{option.display}</option>
-        )), formValues: {...this.state.formValues, measure: measurements[0].value}})
+        )) 
+
+        this.setState({measurementOptions})
     }
 
-    onChangeValue = (event) => {
+    onChangeVolume = (event) => {
         const newVolState = {...this.state.formValues, value: event.target.value}
         this.setState({formValues: newVolState})
         if (this.props.onChange) { this.props.onChange(newVolState) }
@@ -45,9 +55,9 @@ class VolumeSelector extends Component {
                 <label>{this.props.label}</label>
                 <div className={Style.volumeSelector}>
                     <input type="number" min="1" placeholder={"volume..."}
-                    required={this.props.required ? this.props.required : false} value={this.state.formValues.value} 
-                    onChange={(event) => this.onChangeValue(event)} />
-                    <select value={this.state.formValues.measure} onChange={(event) => this.onChangeMeasure(event)} >
+                    required={this.props.required ? this.props.required : false} value={this.state.volume} 
+                    onChange={(event) => this.onChangeVolume(event)} />
+                    <select value={this.state.measurement} onChange={(event) => this.onChangeMeasure(event)} >
                         {this.state.measurementOptions}
                     </select>
                 </div>

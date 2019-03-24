@@ -1,32 +1,40 @@
 // React imports
 import React from 'react'
 // Router imports
-import { Link, withRouter } from 'react-router-dom'
+import { Route, Redirect, Link, withRouter } from 'react-router-dom'
 // Redux Imports
 import { connect } from 'react-redux';
 import { setBackOption, setNavOptions } from '../../_redux/actions/app.actions';
 import { flashMessage, MessageTypes } from '../../_redux/actions/message-flash.actions';
-import { updateEntry } from '../../_redux/actions/diary.actions'
+import { updateEntry, updateActiveEntry } from '../../_redux/actions/diary.actions'
 // Component imports
 import EntryForm from './entry-form'
+import ButtonStyle from '../../_helpers/style-utility/buttons.module.scss'
 
 
 class EntryEditForm extends React.Component {
     constructor(props) {
         super(props)
 
-        this.state =  {
-            drinkName: "tset",
-            alcoholic: "",
-            caffeinated: "",
-            volume: {amount: "", measurement: ""},
-        }
-
         // Set back option 
         this.props.setBackOption(`/diary/${this.props.diaryId}`)
         // Set the sidebar navigation options
         this.props.setNavOptions([])
     }
+
+
+    componentDidMount() {
+        if (!this.props.diaryActiveEntry) {
+            // Diary entry unknown, redirect client
+            var splitUrl = this.props.match.url.split("/")
+            this.props.history.push(`/${splitUrl[1]}/${splitUrl[2]}`)
+        }
+    }
+
+    componentWillUnmount() {
+        this.props.updateActiveEntry()
+    }
+
 
     onSubmit = (formValues) => {
         try {
@@ -46,31 +54,34 @@ class EntryEditForm extends React.Component {
                 requestArgs
             )
         } catch (error) {
-
+            console.log(error)
         }
     }
 
-    componentDidMount() {
-        if (this.props.diaryEntries && this.props.diaryActiveEntry) {
-            const entry = this.props.diaryEntries[this.props.diaryActiveEntry]
-            this.setState({
-                drinkName: entry.drinkType,
-                alcoholic: entry.alcoholic,
-                caffeinated: entry.caffeinated,
-                volume: {amount: entry.volume.amount, measurement: entry.volume.measure},
-            })
-        }    
+    deleteEntry = () => {
+        console.log("deleted")
     }
 
     render() {
+
+        const activeEntry = this.props.diaryEntries[this.props.diaryActiveEntry]
+
+        const formOptions = [
+            <Link to={`/diary/${this.props.diaryId}`} className={ButtonStyle.buttonWarning} id="cancel"><i className="fa fa-times"></i> Cancel</Link>,
+            <button className={ButtonStyle.buttonDanger} type="button" id="deleteEntry" onClick={this.deleteEntry}><i className="fa fa-trash"></i> Delete</button>,
+            <button className={ButtonStyle.buttonSuccess} type="submit" id="submitChanges"><i className="fa fa-pencil-alt"></i> Submit Edit</button>,
+        ]
+
         return(
             <EntryForm 
                 match={this.props.match} 
                 diaryId={this.props.diaryId}
                 flashMessage={this.props.flashMessage} 
                 formTitle={"Edit Diary Entry"} 
+                formValues={activeEntry}
                 onSubmit={this.onSubmit} 
-                state={this.state} 
+                formOptions={formOptions}
+                
             />
         )
     }
@@ -96,6 +107,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         updateEntry: (authToken, diaryId, entryId, args) => {
             dispatch(updateEntry(authToken, diaryId, entryId, args))
+        },
+        updateActiveEntry: (entryId) => {
+            dispatch(updateActiveEntry(entryId))
         }
     }
 }

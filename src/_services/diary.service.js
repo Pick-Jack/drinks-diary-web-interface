@@ -2,9 +2,7 @@ import { submitApiRequest, Methods } from './service-utils';
 import { ValidationException, UnauthorisedException } from "../_helpers/errors";
 
 
-
 const diary_api_endpoint = `${process.env.REACT_APP_API_URL}/diary`
-
 
 
 
@@ -124,7 +122,7 @@ export const getUserDiary = async (authToken, diaryId) => {
  * @return {Promise} resolves to a JSON containing the response or any errors to catch
  */
 export const createDiaryEntry = async (authToken, diaryId, args) => {
-    const url = `${diary_api_endpoint}/${diaryId}/create`
+    const url = `${diary_api_endpoint}/${diaryId}/createEntry`
     const body = {
         drinkType: args.drinkType, 
         volume: args.volume,

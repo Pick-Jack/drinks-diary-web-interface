@@ -15,6 +15,12 @@
     cursor: pointer;
 }
 
+%button-base:disabled, .button:disabled {
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+
 %button, .button {
     @extend %button-base;
     @extend %button-sm;

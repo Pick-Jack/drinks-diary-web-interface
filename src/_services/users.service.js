@@ -1,4 +1,8 @@
-import { resolve } from "path";
+import { submitApiRequest, Methods } from './service-utils';
+import { ValidationException, UnauthorisedException } from "../_helpers/errors";
+
+
+const users_api_endpoint = `${process.env.REACT_APP_API_URL}/users`
 
 
 /** 
@@ -66,4 +70,16 @@ export function checkAuthorisation(token) {
 
     // Submit request to API
     return fetch(url, {method, headers})
+}
+
+
+export const getAccountDetails = async (authToken, accountId) => {
+    if (typeof accountId === "undefined") {
+        // Retrieve account details associated with the authToken
+        const url = `${users_api_endpoint}/getUser`
+        return submitApiRequest(url, Methods.get, null, authToken)
+    } else {
+        // Retrieve account details associated with the provided accountId
+        // TODO : implemenet fetch
+    }
 }

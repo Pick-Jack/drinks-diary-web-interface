@@ -2,12 +2,13 @@
 @import '../../_helpers/style-mixins/colors';
 
 
-.desktopDiaryEntry {
-    width: 250px;
+%diaryEntry {
+    height: 200px;
     display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     
-    margin: 25px;
-    padding: 15px;
+    margin: 25px 25px;
     box-sizing: border-box;
 
     color: black;
@@ -15,26 +16,109 @@
     background-color: white;
     box-shadow: -1px 0px 7px 5px rgba($theme-color, 0.2);
 
-    .entryLeft {
+    .expandRow1 {
+        width: 100%;
         display: flex;
-        align-items: center;
-        flex-direction: column;
-        margin: 0 20px;
-        
-        img {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background-color: lightgrey;
-            margin-bottom: 5px;
+
+        .col1 {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            justify-content: center;
+
+            .entryThumbnail {
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-sizing: border-box;
+                margin-top: 10px;
+
+                img {
+                    width: 75px;
+                    height: 75px;
+                    border-radius: 50%;
+                    background-color: lightgray;
+                }
+            }
+
+            .info {
+                display: flex;
+                align-items: center;
+                flex-direction: column;
+                justify-content: center;
+                box-sizing: border-box;
+                margin-bottom: 5px;
+            }
+        }
+
+        .col2 {
+            padding: 2px;
+            box-sizing: border-box;
+        }
+    }
+
+    .expandRow2 {
+        width: 100%;
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+
+        .statuses {
+            display: flex;
+            align-items: flex-end;
+            flex-direction: column;
+
+            div {
+                p {
+                    margin: 0;
+                    display: inline-block;
+                }
+            }
         }
     }
 }
 
-.desktopDiaryEntry:hover {
+%diaryEntry:hover {
     cursor: pointer;
-    box-shadow: -1px 0px 7px 5px rgba($theme-color, 0.5);
 }
+
+.diaryEntry {
+    @extend %diaryEntry;
+    width: 200px;
+
+    .expandRow1 {
+        .col1 { width: 100%; }
+        .col2 { display: none; }
+    }
+    .expandRow2 {
+        .statuses {
+            div {
+                p { display: none; }
+            }
+        }
+    }
+}
+
+.diaryEntryExpanded {
+    @extend %diaryEntry;
+    width: 300px;
+
+    .expandRow1 {
+        .col1 { width: 80%; }
+        .col2 { width: 20%; }
+    }
+}
+
+.diaryEntryCreate {
+    @extend %diaryEntry;
+    width: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    i { font-size: 1.75em }
+}
+
 
 
 
@@ -75,7 +159,4 @@
             display: inline-block;
         }
     }
-    
-
-
 }

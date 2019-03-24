@@ -6,6 +6,32 @@
     align-items: flex-end;
     position: absolute;
     top: 0; bottom: 0; left: 0; right: 0;
+
+    .createEntry {
+        width: 250px;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        justify-content: center;
+        
+        i {
+            font-size: 1.5em;
+        }
+        
+        margin: 25px;
+        padding: 15px;
+        box-sizing: border-box;
+    
+        color: black;
+        text-decoration: none;
+        background-color: white;
+        box-shadow: -1px 0px 7px 5px rgba($theme-color, 0.2);
+    }
+
+    .createEntry:hover {
+        cursor: pointer;
+        box-shadow: -1px 0px 7px 5px rgba($theme-color, 0.5);
+    }
 }
 
 .mobileDiaryLog {

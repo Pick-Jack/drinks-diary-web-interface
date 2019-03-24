@@ -68,9 +68,15 @@ export const updateActiveDate = (newDate) => {
 
 
 export const updateActiveEntry = (entryId) => {
-    return {
-        type: "SET-ACTIVE-ENTRY",
-        payload: entryId
+    if (typeof entryId !== "undefined") {
+        return {
+            type: "SET-ACTIVE-ENTRY",
+            payload: entryId
+        }
+    } else {
+        return {
+            type: "UNSET-ACTIVE-ENTRY"
+        }
     }
 }
 

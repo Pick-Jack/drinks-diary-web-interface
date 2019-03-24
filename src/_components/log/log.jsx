@@ -12,17 +12,6 @@ class Log extends React.Component {
 
     constructor(props) {
         super(props)
-        this.state = {
-            nextEnabled: true,
-            prevEnabled: true 
-        }
-    }
-
-    componentDidMount() {
-        this.setState({
-            nextEnabled: (this.props.activeDate < this.props.endDate),
-            prevEnabled: (this.props.activeDate > this.props.startDate)
-        })
     }
 
     getDisplayDate = () => {
@@ -72,12 +61,15 @@ class Log extends React.Component {
     )
 
     render() {
+        const nextEnabled = !(this.props.activeDate < this.props.endDate)
+        const prevEnabled = !(this.props.activeDate > this.props.startDate)
+
         if (this.props.platform === "DESKTOP") {
             const LogView = this.singleLogView
             return (
                 <div className={Style.log}>
                     <div className={Style.logActions}>
-                        <button className={ButtonStyle.buttonSM} onClick={this.props.onPrev} disabled={this.state.prevEnabled}>
+                        <button className={ButtonStyle.buttonSM} onClick={this.props.onPrev} disabled={prevEnabled}>
                             <i className="fa fa-arrow-left"></i> Previous
                         </button>
 
@@ -86,12 +78,12 @@ class Log extends React.Component {
                             <button className={ButtonStyle.buttonXS}><i className="fa fa-calendar-week"></i></button>
                         </div>
 
-                        <button className={ButtonStyle.buttonSM} onClick={this.props.onNext} disabled={this.state.nextEnabled}>
+                        <button className={ButtonStyle.buttonSM} onClick={this.props.onNext} disabled={nextEnabled}>
                             Next <i className="fa fa-arrow-right"></i>
                         </button>
                     </div>
 
-                    <LogView>{this.props.entries}</LogView>
+                    <LogView>{this.props.entries}{this.props.children}</LogView>
                 </div>
             )
         }
