@@ -14,13 +14,12 @@ import ErrorBoundary from '../error-boundary';
 import LoginForm from '../login-form'
 import RegistrationForm from '../registration-form'
 
-import { Home } from '../home';
+import HomeView from '../home-view'
+import DiaryView from '../presenters/diary-view'
 import AccountView from '../account-view'
-import { DiaryView } from '../presenters/diary-view';
 import DiaryCreationForm from '../diary-creation-form';
 // Style dependencies
 import Style from './app.module.scss';
-
 
 
 class App extends React.Component {
@@ -45,15 +44,25 @@ class App extends React.Component {
     render() {
         var RouteSet
         if (this.props.user.isAuthorised) {
-            RouteSet = [
-                <SecureRoute exact={true} key="/" path="/" component={Home} />,
-                <SecureRoute exact={true} key="/account" path={"/account"} component={AccountView} />,
-                <SecureRoute key="/createDiary" path={"/createDiary"} component={DiaryCreationForm} />,
-                
-                <Route key="/logOut" path={"/logOut"} render={() => {this.props.submitLogOut(); return(<Redirect to="/" />)}} />,
-                <Route key="/diary/:diaryId" path={"/diary/:diaryId"} component={DiaryView} />,
-                <Redirect key="/register" from="/register" to="/" />
-            ]
+            if (this.props.platform === "DESKTOP") {
+                RouteSet = [
+                    <SecureRoute exact={true} key="/" path="/" component={HomeView} />,
+                    <SecureRoute key="/diary/:diaryId" path={"/diary/:diaryId"} component={HomeView} />,
+                    <SecureRoute key="/createDiary" path={"/createDiary"} component={DiaryCreationForm} />,
+                    <SecureRoute exact={true} key="/account" path={"/account"} component={AccountView} />,
+                    <Route key="/logOut" path={"/logOut"} render={() => {this.props.submitLogOut(); return(<Redirect to="/" />)}} />,
+                    <Redirect key="/register" from="/register" to="/" />
+                ]
+            } else if (this.props.platform === "MOBILE") {
+                RouteSet = [
+                    <SecureRoute exact={true} key="/" path="/" component={HomeView} />,
+                    <SecureRoute key="/diary/:diaryId" path={"/diary/:diaryId"} component={DiaryView} />,
+                    <SecureRoute key="/createDiary" path={"/createDiary"} component={DiaryCreationForm} />,
+                    <SecureRoute exact={true} key="/account" path={"/account"} component={AccountView} />,
+                    <Route key="/logOut" path={"/logOut"} render={() => {this.props.submitLogOut(); return(<Redirect to="/" />)}} />,
+                    <Redirect key="/register" from="/register" to="/" />
+                ]
+            }
         }
         else {
             RouteSet = [
@@ -82,7 +91,8 @@ class App extends React.Component {
 
 
 const mapStateToProps = (state) => ({
-    user: state.user
+    user: state.user,
+    platform: state.app.platform
 })
     
 const mapDispatchToProps = (dispatch) => {

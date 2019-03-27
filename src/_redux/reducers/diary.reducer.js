@@ -22,7 +22,7 @@ export function diary(state=defaultState, action) {
         case "SET-ACTIVE-DATE":
             return {
                 ...state,
-                activeDate: action.payload
+                activeDate: new Date(action.payload.setHours(0, 0, 0, 0))
             }
 
         case "SET-ACTIVE-ENTRY":
@@ -35,8 +35,17 @@ export function diary(state=defaultState, action) {
             delete state.activeEntryId
             return { ...state }
 
+        case "ADD-DIARY-ENTRY":
+            var entries = update(state.entries, {
+                $merge: action.payload
+            })
+            return { 
+                ...state, 
+                entries: entries
+            }
+
         case "UPDATE-DIARY-ENTRIES":
-            const entries = update(state.entries, {
+            var entries = update(state.entries, {
                 [action.payload.entry._id]: {$set: action.payload.entry}
             })
             return {

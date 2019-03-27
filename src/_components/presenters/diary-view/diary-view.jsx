@@ -54,7 +54,9 @@ class DiaryView extends React.Component {
                         <h1>{this.props.diaryInfo.diaryName}</h1>
 
                         <div className={StatusStyle.statusIndicator}>
-                            <div className={StatusStyle.iconSuccess}></div>
+                            {(this.props.diaryInfo.status === "Active") && <div className={StatusStyle.iconSuccess}></div>}
+                            {(this.props.diaryInfo.status === "Pending") && <div className={StatusStyle.iconWarning}></div>}
+                            {(this.props.diaryInfo.status === "Complete") && <div className={StatusStyle.iconDanger}></div>}
                             <h3>{this.props.diaryInfo.status}</h3>
                         </div>
 
@@ -69,7 +71,12 @@ class DiaryView extends React.Component {
                 <div id={Style.mobileDiaryView}>
                     <div className={Style.viewHeader}>
                         <h1>{this.props.diaryInfo.diaryName}</h1>
-                        <h6>{this.props.diaryInfo.status}</h6>
+                        <div className={StatusStyle.statusIndicator}>
+                            {(this.props.diaryInfo.status === "Active") && <div className={StatusStyle.iconSuccess}></div>}
+                            {(this.props.diaryInfo.status === "Pending") && <div className={StatusStyle.iconWarning}></div>}
+                            {(this.props.diaryInfo.status === "Complete") && <div className={StatusStyle.iconDanger}></div>}
+                            <h3>{this.props.diaryInfo.status}</h3>
+                        </div>
                     </div>
     
                     <div className={Style.viewContent}><Routes /></div>

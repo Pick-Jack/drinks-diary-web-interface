@@ -1,0 +1,23 @@
+
+
+#desktopHomeView {
+    width: 100%;
+    height: 100%;
+    display: flex;
+
+    .diarySelection {
+        width: 400px;
+        height: 100%;
+        overflow-y: scroll;
+        box-sizing: border-box;
+        margin-left: 20px;
+        padding-right: 25px;
+        
+    }
+
+    .diaryView {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+}

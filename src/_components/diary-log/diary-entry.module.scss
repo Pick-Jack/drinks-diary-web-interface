@@ -14,7 +14,7 @@
     color: black;
     text-decoration: none;
     background-color: white;
-    box-shadow: -1px 0px 7px 5px rgba($theme-color, 0.2);
+    box-shadow: -1px 0px 7px 3px rgba($theme-color, 0.2);
 
     .expandRow1 {
         width: 100%;
@@ -110,7 +110,7 @@
     }
 }
 
-.diaryEntryCreate {
+.desktopDiaryEntryCreate {
     @extend %diaryEntry;
     width: 200px;
     display: flex;
@@ -119,10 +119,14 @@
     i { font-size: 1.75em }
 }
 
+.desktopDiaryEntryCreate:hover {
+    background-color: $theme-color-transparent;
+    box-shadow: -1px 0px 7px 3px rgba($theme-color, 0.3);
+}
 
 
 
-.mobileDiaryEntry {
+.mobileDiaryEntry, %mobileDiaryEntry {
     width: 100%;
     padding: 1vh 3vw;
     box-sizing: border-box;
@@ -159,4 +163,19 @@
             display: inline-block;
         }
     }
+}
+
+.mobileDiaryEntryCreate {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 3vh 0;
+
+    text-decoration: none;
+    color: black;
+}
+
+.mobileDiaryEntryCreate:hover {
+    background-color: $theme-color-transparent;
 }
