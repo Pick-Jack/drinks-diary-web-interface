@@ -3,7 +3,7 @@ import React from 'react';
 import { Link, withRouter } from 'react-router-dom';
 // Redux Imports
 import { connect } from 'react-redux';
-import { setBackOption, setNavOptions } from '../../_redux/actions/app.actions.js';
+import { setBackOption } from '../../_redux/actions/app.actions.js';
 import { updateActiveDate, updateActiveEntry } from '../../_redux/actions/diary.actions';
 // Error imports
 import { UnexpectedPlatformError } from '../../_helpers/errors'
@@ -23,11 +23,6 @@ class DiaryLog extends React.Component {
     
         // Set back option
         this.props.setBackOption("/")
-        // Set nav bar options
-        this.props.setNavOptions([
-            {location: `${this.props.match.url}/create`, jsx: (<span><i className="fa fa-plus"></i> Create Entry</span>)},
-            {location: `${this.props.match.url}/exerciseLog`, jsx: (<span><i className="fa fa-book"></i> Exercise Log</span>)}
-        ])
    
         this.state = {
             expandedEntry: "",
@@ -38,7 +33,7 @@ class DiaryLog extends React.Component {
     }
 
     toggleEntryExpand = (entryId) => {
-        if (entryId === this.state.expandedEntry){
+        if (entryId === this.state.expandedEntry) {
             this.setState({expandedEntry: ""})
         } else {
             this.setState({expandedEntry: entryId})
@@ -72,6 +67,7 @@ class DiaryLog extends React.Component {
                             caffeinated={entry.caffeinated} 
                             volume={`${entry.volume.amount} ${entry.volume.measure}`} 
                             onClick={this.toggleEntryExpand} 
+                            onEdit={this.onEditEntry}
                             match={this.props.match}
                             expanded={expanded}
                         />
@@ -103,7 +99,7 @@ class DiaryLog extends React.Component {
 
     handlePrevPage = () => {
         // Check current date is not completion date
-        if (this.props.diaryActiveDate > this.props.diaryInfo.startDate) {
+        if (this.props.diaryActiveDate > new Date(this.props.diaryInfo.startDate)) {
             // Decrement date
             var prevDay = this.props.diaryActiveDate
             prevDay.setDate(prevDay.getDate() - 1);
@@ -123,10 +119,13 @@ class DiaryLog extends React.Component {
                         onPrev={this.handlePrevPage}
                         entries={this.generateDiaryEntries()}
                     >
-                        <Link to={`/diary/${this.props.diaryInfo.diaryId}/create`} className={EntryStyle.diaryEntryCreate}>
-                            <i className="fa fa-plus"></i>
-                            <h5>Create Entry</h5>
-                        </Link>
+                        {
+                            this.props.diaryActiveDate && this.props.diaryActiveDate.getTime() === (new Date).setHours(0,0,0,0) &&
+                            <Link to={`/diary/${this.props.diaryInfo.diaryId}/create`} className={EntryStyle.desktopDiaryEntryCreate}>
+                                <i className="fa fa-plus"></i>
+                                <h5>Create Entry</h5>
+                            </Link>
+                        }
                     </Log>
                 </div>
             )
@@ -141,12 +140,15 @@ class DiaryLog extends React.Component {
                         onNext={this.handleNextPage}
                         onPrev={this.handlePrevPage}
                         entries={this.generateDiaryEntries()}
-                    />
-    
-                    <Link to={`${this.props.match.url}/create`} className={Style.newEntryOption}>
-                        <h6><i className="fa fa-plus"></i></h6>
-                        <label>New Entry</label>
-                    </Link>
+                    >
+                        {
+                            this.props.diaryActiveDate && this.props.diaryActiveDate.getTime() === (new Date).setHours(0,0,0,0) &&
+                            <Link to={`/diary/${this.props.diaryInfo.diaryId}/create`} className={EntryStyle.mobileDiaryEntryCreate}>
+                                <i className="fa fa-plus"></i>
+                                <h5>Create Entry</h5>
+                            </Link>
+                        }
+                    </Log>
            
                 </div>
             )
@@ -172,9 +174,6 @@ const mapDispatchToProps = (dispatch) => {
     return {
         setBackOption: (location, type) => {
             dispatch(setBackOption(location, type))
-        },
-        setNavOptions: (optionsArray) => {
-            dispatch(setNavOptions(optionsArray))
         },
         updateActiveDate: (newDate) => {
             dispatch(updateActiveDate(newDate))

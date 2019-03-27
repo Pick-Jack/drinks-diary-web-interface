@@ -4,11 +4,12 @@ import React from 'react'
 import { Route, Redirect, Link, withRouter } from 'react-router-dom'
 // Redux Imports
 import { connect } from 'react-redux';
-import { setBackOption, setNavOptions } from '../../_redux/actions/app.actions';
+import { setBackOption } from '../../_redux/actions/app.actions';
 import { flashMessage, MessageTypes } from '../../_redux/actions/message-flash.actions';
 import { updateEntry, updateActiveEntry } from '../../_redux/actions/diary.actions'
 // Component imports
 import EntryForm from './entry-form'
+// Style imports
 import ButtonStyle from '../../_helpers/style-utility/buttons.module.scss'
 
 
@@ -18,8 +19,6 @@ class EntryEditForm extends React.Component {
 
         // Set back option 
         this.props.setBackOption(`/diary/${this.props.diaryId}`)
-        // Set the sidebar navigation options
-        this.props.setNavOptions([])
     }
 
 
@@ -54,6 +53,7 @@ class EntryEditForm extends React.Component {
                 requestArgs
             )
         } catch (error) {
+            console.log("here")
             console.log(error)
         }
     }
@@ -67,9 +67,9 @@ class EntryEditForm extends React.Component {
         const activeEntry = this.props.diaryEntries[this.props.diaryActiveEntry]
 
         const formOptions = [
-            <Link to={`/diary/${this.props.diaryId}`} className={ButtonStyle.buttonWarning} id="cancel"><i className="fa fa-times"></i> Cancel</Link>,
-            <button className={ButtonStyle.buttonDanger} type="button" id="deleteEntry" onClick={this.deleteEntry}><i className="fa fa-trash"></i> Delete</button>,
-            <button className={ButtonStyle.buttonSuccess} type="submit" id="submitChanges"><i className="fa fa-pencil-alt"></i> Submit Edit</button>,
+            <Link key="1" to={`/diary/${this.props.diaryId}`} className={ButtonStyle.buttonWarning} id="cancel"><i className="fa fa-times"></i> Cancel</Link>,
+            <button key="2" className={ButtonStyle.buttonDanger} type="button" id="deleteEntry" onClick={this.deleteEntry}><i className="fa fa-trash"></i> Delete</button>,
+            <button key="3" className={ButtonStyle.buttonSuccess} type="submit" id="submitChanges"><i className="fa fa-pencil-alt"></i> Submit Edit</button>,
         ]
 
         return(
@@ -98,9 +98,6 @@ const mapDispatchToProps = (dispatch) => {
     return {
         setBackOption: (location, type) => {
             dispatch(setBackOption(location, type))
-        },
-        setNavOptions: (optionsArray) => {
-            dispatch(setNavOptions(optionsArray))
         },
         flashMessage: (message, type) => {
             dispatch(flashMessage(message, type))

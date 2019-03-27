@@ -17,76 +17,17 @@ export class DiaryResponseException extends Error {
 
 
 /**
- * Submits a request to the diary endpoint of the Drinks Diary API
- * @param {string} endpoint sub-endpoint to target request
- * @param {string} method method used to send request
- * @param {string} authToken user authorisation token
- * @param {JSON} body contains the parameters for the request body
- */
-const submitRequest = (endpoint, method, authToken, body) => {
-    const url = `${process.env.REACT_APP_API_URL}/diary${endpoint}`
-    const headers = {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${authToken}`
-    }
-
-    // Stringify body for request
-    if (body)
-        body = JSON.stringify(body)
-
-    // Submit request to API
-    return fetch(url, {mode: "cors", method, headers, body})
-}
-
-
-/**
  * Makes call to the Drinks Diary API to create a new diary
  * @param {JSON} userDoc contains user details for verification.
  * @param {JSON} args contains the body argument values for the request body
  * @returns a promise which resolves to the response JSON object
  * @throws DiaryResponseException containing details of non-successful requests
  */
-export const createDiary = (userDoc, args) => {
-    var body;
-    if (args.hasOwnProperty('template')) {
-        body = {
-            diaryId: args.diaryId
-        }
-    } else {
-        body = {
-            diaryName: args.diaryName,
-            duration: args.duration
-        }
-    }
-
-    // Submit creation request to API
-    return new Promise((resolve, reject) => {
-        const endpoint = '/createDiary'
-        submitRequest(endpoint, Methods.post, userDoc.authToken, body)
-            .then(response => {
-                response.json().then(responseBody => {
-                    if (response.status === 200 || response.status === 201) {
-                        resolve(responseBody)
-                    }
-                    else if (responseBody.hasOwnProperty("error")) {
-                        if (response.status === 400 && responseBody.error.type == "ValidationError") {
-                            // Flag first error in returned list
-                            throw new ValidationException(responseBody.error.errors[0].field, responseBody.error.errors[0].message)
-                        }
-                        else  {
-                            throw new DiaryResponseException(endpoint, response.status, responseBody.error.message)
-                        }
-                    }
-                })
-                .catch(error => {
-                    reject(error)
-                })
-            })
-            .catch(error => {
-                reject(error)
-            })
-        })
+export const createDiary = async (authToken, args) => {
+    const url = `${diary_api_endpoint}/createDiary`
+    return await submitApiRequest(url, Methods.post, args, authToken)
 }
+
 
 /**
  * Send request to Drinks Diary API to retrieve the diaries associated

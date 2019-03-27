@@ -4,6 +4,7 @@
 
 %iconBase {
     border-radius: 50%;
+    margin-right: 5px;
 }
 
 
@@ -19,6 +20,11 @@
     background-color: $danger-color;
 }
 
+
+%iconXS {
+    height: 15px;
+    width: 15px;
+}
 
 %iconSM {
     height: 25px;
@@ -40,6 +46,12 @@
     display: flex;
     align-items: center;
 
+    .iconSuccessXS {
+        @extend %iconBase;
+        @extend %iconActive;
+        @extend %iconXS;
+    }
+
     .iconSuccess {
         @extend %iconBase;
         @extend %iconActive;
@@ -58,6 +70,12 @@
         @extend %iconLG;
     }
 
+    .iconWarningXS {
+        @extend %iconBase;
+        @extend %iconWarning;
+        @extend %iconXS;
+    }
+
     .iconWarning {
         @extend %iconBase;
         @extend %iconWarning;
@@ -74,6 +92,12 @@
         @extend %iconBase;
         @extend %iconWarning;
         @extend %iconLG;
+    }
+
+    .iconDangerXS {
+        @extend %iconBase;
+        @extend %iconDanger;
+        @extend %iconXS;
     }
 
     .iconDanger {

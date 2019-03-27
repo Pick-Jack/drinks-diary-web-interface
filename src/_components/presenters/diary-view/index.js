@@ -1,1 +1,2 @@
-export { default as DiaryView } from './diary-view'
+import DiaryView from './diary-view'
+export default DiaryView

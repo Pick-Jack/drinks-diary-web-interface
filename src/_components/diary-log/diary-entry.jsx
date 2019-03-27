@@ -11,10 +11,9 @@ import { UnexpectedPlatformError } from '../../_helpers/errors';
 
 
 const DiaryEntry = (props) => {
-    console.log(props.expanded)
     if (props.platform === "DESKTOP") {
         return (
-            <div className={props.expanded ? Style.diaryEntryExpanded : Style.diaryEntry} onClick={ () => props.onClick(props.entryId) }>
+            <div className={props.expanded ? Style.diaryEntryExpanded : Style.diaryEntry} onClick={ () => props.onClick(props.entryId)}>
                 <div className={Style.expandRow1}>
                     <div className={Style.col1}>
                         <div className={Style.entryThumbnail}>
@@ -28,7 +27,7 @@ const DiaryEntry = (props) => {
                     </div>
 
                     <div className={Style.col2}>
-                        <Link to={`${props.match.url}/edit`} className={ButtonStyle.buttonXS}><i className="fa fa-pencil-alt"></i> Edit</Link>
+                        <button onClick={() => props.onEdit(props.entryId)} className={ButtonStyle.buttonXS}><i className="fa fa-pencil-alt"></i> Edit</button>
                     </div>
                 </div>
 
@@ -50,10 +49,12 @@ const DiaryEntry = (props) => {
     }
     else if (props.platform === "MOBILE") {
         return (
-            <div className={Style.mobileDiaryEntry}>
+            <div className={Style.mobileDiaryEntry} >
                 <div className={Style.header}>
                     <p className={Style.time}>{`${props.datetime.getHours()}:${props.datetime.getMinutes()}`}</p>
-                    <Link to={`${props.match.url}/edit`} className={ButtonStyle.buttonXS}><i className="fa fa-pencil-alt"></i> Edit</Link>
+                    <Link to={`${props.match.url}/edit`} className={ButtonStyle.buttonXS} onClick={() => props.onEdit(props.entryId)}>
+                        <i className="fa fa-pencil-alt"></i> Edit
+                    </Link>
                 </div>
                 <div className={Style.main}>
                     

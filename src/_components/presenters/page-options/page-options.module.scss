@@ -1,0 +1,50 @@
+
+@import '../../../_helpers/style-mixins/colors';
+
+
+.pageOptions {
+    display: flex;
+    justify-content: space-between;
+    background-color: $theme-color-transparent;
+    box-shadow: inset -1px 0px 5px 2px rgba(30, 131, 199, 0.2);
+    box-sizing: border-box;
+    padding: 10px 5px;
+    
+    %option {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 1.5em;
+        padding: 0 15px;
+        
+        text-decoration: none;
+        color: black;
+
+        i { margin-right: 10px; }
+        p { display: inline-block; margin: 0; }
+    }
+
+    %option:hover {
+        cursor: pointer;
+        opacity: 0.7;
+    }
+
+    .optionsLeft {
+        .option {
+            @extend %option;
+            border-right: 1px solid black;
+        }
+    }
+
+    .optionsRight {
+        .option, %optionRight {
+            @extend %option;
+            border-left: 1px solid black;
+        }
+
+        .optionSignOut {
+            @extend %optionRight;
+            color: $danger-color;
+        }
+    }
+}

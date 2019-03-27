@@ -12,62 +12,9 @@
         height: 100%;
         display: flex;
 
-        .pageNav {
-            width: 250px;
-            height: 100%;
-            background-color: $theme-color-transparent;
-
-            ul {
-                width: 100%;
-                height: 100%;
-                display: flex;
-                flex-direction: column;
-                box-sizing: border-box;
-                list-style: none;
-                padding-top: 25px;
-                
-                margin-block-end: 0;
-                margin-block-start: 0;
-                padding-inline-start: 0;
-                
-                li {
-                    width: 100%;
-                    margin-top: 25px;
-
-                    a {
-                        width: 100%;                    
-                        height: 50px;
-                        display: flex;
-                        align-items: center;
-                        
-                        padding: 5px 25px;
-
-                        color: black;
-                        font-size: 1.5em;
-                        text-decoration: none;
-                        box-sizing: border-box;
-                    }
-
-                    a:hover {
-                        opacity: 75;
-                        cursor: pointer;
-                        background-color: $theme-color-transparent;
-                    }
-
-                    a.logOut {
-                        color: $danger-color;
-                    }
-
-                    a.logOut:hover {
-                        background-color: rgba($danger-color, 0.25);
-                    }
-                }
-            }
-        }
-
         .pageMain {
+            width: 100%;
             height: 100%;
-            width: calc(100% - 250px);
             overflow-y: auto;
 
             display: flex;

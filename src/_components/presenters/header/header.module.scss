@@ -16,49 +16,33 @@
             height: 100%;
         }
 
-        .headerMenu {
-            height: 100%;
+
+        .headerRight {
             display: flex;
             align-items: center;
-            flex-direction: row-reverse;
+            justify-content: center;
+            margin-right: 25px;
 
-            img.profilePicture {
-                width: auto;
-                height: 75%;
-                margin-right: 10px;
-                border-radius: 50%;
-            }
-
-            .pageOptions {
-                height: 100%;
-                display: flex;
-                align-items: center;
-                margin-right: 50px;
-            }
-
-            .headerButton {
-                height: 70%; 
-                display: flex;
-                align-items: center;
-                box-sizing: content-box;
-                margin-right: 25px;
-                padding: 2px;
-
-                border: none;
+            h4 {
                 color: white;
-                background-color: $theme-color;
-                text-decoration: none;
+                margin-right: 25px;
+            }
 
-                i {
-                    font-size: 2em;
+            .accountOption {
+                display: flex;
+                justify-content: center;
+                box-sizing: border-box;
+
+                img {
+                    width: 50px;
+                    height: 50px;
+                    border-radius: 50%;
                 }
             }
 
-            .headerButton:hover {
-                cursor: pointer;
-                color: $theme-color;
+            .accountOption:hover {
                 background-color: white;
-                border-radius: 2px;
+                border-radius: 5px;
             }
         }
     }

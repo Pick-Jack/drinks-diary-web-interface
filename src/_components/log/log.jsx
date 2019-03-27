@@ -19,34 +19,13 @@ class Log extends React.Component {
             // Format date string for display
             var dateString = `${this.props.activeDate.getDate()}-${this.props.activeDate.getMonth()}-${this.props.activeDate.getFullYear()}`
             // Display today for current date
-            if (this.props.activeDate === new Date()) { return `Today (${dateString})` } 
+            var currentDate = (new Date).setHours(0,0,0,0)
+            var activeDate = (new Date(this.props.activeDate)).setHours(0,0,0,0)
+            if (currentDate === activeDate) { return `Today (${dateString})` } 
             else { return dateString }
         }
     }
 
-    MobileLogView = (props) => (
-        <div className={Style.mobileLogView}>
-
-            <div className={Style.viewOptions}>
-                <button className={ButtonStyle.buttonXS} onClick={this.props.onPrev} disabled={this.state.prevEnabled}>
-                    <i className="fa fa-arrow-left"></i> Previous
-                </button>
-                <button className={ButtonStyle.buttonXS} onClick={this.props.onNext} disabled={this.state.nextEnabled}>
-                    Next <i className="fa fa-arrow-right"></i>
-                </button>
-            </div>
-
-            <div className={Style.logView}>
-                <div className={Style.logDate}>
-                    <h5>{this.getDisplayDate()}</h5>
-                </div>
-
-                <div className={Style.logMain}>
-                    {props.children}
-                </div>
-            </div>
-        </div>
-    )
 
     singleLogView = (props) => (
         <div className={Style.singleLogView}>
@@ -73,11 +52,6 @@ class Log extends React.Component {
                             <i className="fa fa-arrow-left"></i> Previous
                         </button>
 
-                        <div className={Style.displayOptions}>
-                            <button className={ButtonStyle.buttonXS}><i className="fa fa-calendar-day"></i></button>
-                            <button className={ButtonStyle.buttonXS}><i className="fa fa-calendar-week"></i></button>
-                        </div>
-
                         <button className={ButtonStyle.buttonSM} onClick={this.props.onNext} disabled={nextEnabled}>
                             Next <i className="fa fa-arrow-right"></i>
                         </button>
@@ -88,7 +62,24 @@ class Log extends React.Component {
             )
         }
         else if (this.props.platform === "MOBILE") {
-            return (<this.MobileLogView>{this.props.entries}</this.MobileLogView>)
+            return (
+                <div className={Style.mobileLogView}>
+
+                    <div className={Style.viewOptions}>
+                        <button className={ButtonStyle.buttonXS} onClick={this.props.onPrev} disabled={prevEnabled}>
+                            <i className="fa fa-arrow-left"></i> Previous
+                        </button>
+                        <button className={ButtonStyle.buttonXS} onClick={this.props.onNext} disabled={nextEnabled}>
+                            Next <i className="fa fa-arrow-right"></i>
+                        </button>
+                    </div>
+
+                    <div className={Style.logView}>
+                        <div className={Style.logDate}><h5>{this.getDisplayDate()}</h5></div>
+                        <div className={Style.logMain}>{this.props.entries}{this.props.children}</div>
+                    </div>
+                </div>
+            )
         }
         else {
             throw new UnexpectedPlatformError(this.props.platform, this.constructor.name)

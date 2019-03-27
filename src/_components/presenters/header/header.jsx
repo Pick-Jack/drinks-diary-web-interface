@@ -16,15 +16,12 @@ const Header = (props) => {
             <div className={Style.header}> 
                 <img className={Style.logo} src={logo} />
 
-                <div className={Style.headerMenu}>
-                    <img className={Style.profilePicture} src={profile} />
-                    <Link to={{pathname: "/account", state: {prevLocation: props.location.pathname}}} className={Style.headerButton}>
-                        <i className="fa fa-user-cog"></i>
+                <div className={Style.headerRight}>
+                    <h4>Welcome User</h4>
+                    
+                    <Link to={{pathname: "/account", state: {prevLocation: props.location.pathname}}} className={Style.accountOption}>
+                        <img src={profile} />
                     </Link>
-
-                    <div className={Style.pageOptions}>
-                        <a className={Style.headerButton}><i className="fa fa-question"></i></a>
-                    </div>
                 </div>
             </div>
         )

@@ -10,7 +10,7 @@
     color: black;
     text-decoration: none;
     background-color: white;
-    box-shadow: -1px 0px 7px 5px rgba($theme-color, 0.2);
+    box-shadow: -1px 0px 7px 3px rgba($theme-color, 0.2);
 
     .info {
         margin: 5px 0;
@@ -18,8 +18,14 @@
     }
 }
 
+.diaryEntrySelected {
+    @extend %diaryEntry;
+    background-color: $theme-color-transparent
+}
+
 .diaryEntry:hover, %diaryEntry:hover {
     color: black;
     cursor: pointer;
     background-color: $theme-color-transparent;
+    box-shadow: -1px 0px 7px 3px rgba($theme-color, 0.3);
 }

@@ -1,5 +1,5 @@
 
-import { getUserDiary, updateDiaryEntry } from '../../_services/diary.service'
+import { getUserDiary, createDiaryEntry, updateDiaryEntry } from '../../_services/diary.service'
 
 
 export const setActiveDiary = (authToken, diaryId) => {
@@ -81,18 +81,32 @@ export const updateActiveEntry = (entryId) => {
 }
 
 
-export const createDiaryEntry = () => {
+export const createEntry = (authToken, diaryId, entryArgs) => {
+    return dispatch => {
+        createDiaryEntry(authToken, diaryId, entryArgs)
+        .then(response => {
+            if (response.error) { throw response.response }
+            
+            const newEntry = {}
+            newEntry[response.response._id] = response.response
 
+            dispatch({ type: "ADD-DIARY-ENTRY", payload: newEntry })
+                .catch( error => {
+                    console.log("error caught in dispatch")
+                })
+        })
+        .catch(error => {
+            console.log(error.message)
+        })
+    }
 }
 
 
 export const updateEntry = (authToken, diaryId, entryId, args) => {
     return async dispatch => {
-        // Use await to propagate 
+        // Use await to propagate exceptions
         const response = await updateDiaryEntry(authToken, diaryId, entryId, args)
-        if (response.error) {
-            throw response.response
-        }
+        if (response.error) { throw response.response }
 
         // Dispatch to reducer
         dispatch({
