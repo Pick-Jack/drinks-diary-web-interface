@@ -1,5 +1,5 @@
 
-import { getUserDiary, createDiaryEntry, updateDiaryEntry } from '../../_services/diary.service'
+import { getUserDiary, createDiaryEntry, updateDiaryEntry, deleteDiaryEntry } from '../../_services/diary.service'
 
 
 export const setActiveDiary = (authToken, diaryId) => {
@@ -84,36 +84,88 @@ export const updateActiveEntry = (entryId) => {
 export const createEntry = (authToken, diaryId, entryArgs) => {
     return dispatch => {
         createDiaryEntry(authToken, diaryId, entryArgs)
-        .then(response => {
-            if (response.error) { throw response.response }
-            
-            const newEntry = {}
-            newEntry[response.response._id] = response.response
-
-            dispatch({ type: "ADD-DIARY-ENTRY", payload: newEntry })
-                .catch( error => {
-                    console.log("error caught in dispatch")
+            .then(response => {
+                if (response.error) { 
+                    throw response.response 
+                }
+                else {
+                    // Dispatch for successful diary operation
+                    dispatch({
+                        type: "ADD-DIARY-ENTRY",
+                        payload: { [response.response._id]: response.response }
+                    })
+                }
+            })
+            .catch(error => {
+                // Dispatch for failed diary operation
+                dispatch({
+                    type: "SET-DIARY-ERROR",
+                    payload: error.error
                 })
-        })
-        .catch(error => {
-            console.log(error.message)
-        })
+            })
     }
 }
 
 
 export const updateEntry = (authToken, diaryId, entryId, args) => {
-    return async dispatch => {
-        // Use await to propagate exceptions
-        const response = await updateDiaryEntry(authToken, diaryId, entryId, args)
-        if (response.error) { throw response.response }
-
-        // Dispatch to reducer
-        dispatch({
-            type: "UPDATE-DIARY-ENTRIES",
-            payload:  {...response}
-        })
+    return dispatch => {
+        updateDiaryEntry(authToken, diaryId, entryId, args)
+            .then(response => {
+                if (response.error) {
+                    throw response.response
+                }
+                else {
+                    // Dispatch for successful diary operation
+                    dispatch({
+                        type: "UPDATE-DIARY-ENTRY",
+                        payload: response.response 
+                    })
+                }
+            })
+            .catch(error => {
+                // Dispatch for failed diary operation
+                dispatch({
+                    type: "SET-DIARY-ERROR",
+                    payload: error
+                })
+            })
     }
 }
 
 
+export const deleteEntry = (authToken, diaryId, entryId) => {
+    return dispatch => {
+        deleteDiaryEntry(authToken, diaryId, entryId)
+            .then(response => {
+                if (response.error) {
+                    throw response.response
+                }
+                else {
+                    // Dispatch for successful diary operation
+                    dispatch({
+                        type: "DELETE-DIARY-ENTRY",
+                        payload: entryId
+                    })
+                    // Unset the active entry as it is now deleted
+                    dispatch({ type: "UNSET-ACTIVE-ENTRY" })
+                }
+            })
+            .catch(error => {
+                // Dispatch for failed diary operation
+                dispatch({
+                    type: "SET-DIARY-ERROR",
+                    payload: error
+                })
+            })
+    }
+}
+
+
+export const unsetDiaryError = () => {
+    return { type: "UNSET-DIARY-ERROR" }
+}
+
+
+export const resetDiarySuccessStatus = () => {
+    return {type: "RESET-DIARY-SUCCESS-STATUS"}
+}

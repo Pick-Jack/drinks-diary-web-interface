@@ -64,14 +64,7 @@ export const getUserDiary = async (authToken, diaryId) => {
  */
 export const createDiaryEntry = async (authToken, diaryId, args) => {
     const url = `${diary_api_endpoint}/${diaryId}/createEntry`
-    const body = {
-        drinkType: args.drinkType, 
-        volume: args.volume,
-        measurement: args.measure,
-        caffeinated: args.caffeinated,
-        alcoholic: args.alcoholic
-    }
-    return await submitApiRequest(url, Methods.post, body, authToken)
+    return await submitApiRequest(url, Methods.post, args, authToken)
 }
 
 
@@ -86,13 +79,32 @@ export const createDiaryEntry = async (authToken, diaryId, args) => {
  */
 export const updateDiaryEntry = async (authToken, diaryId, entryId, args) => {
     const url = `${diary_api_endpoint}/${diaryId}/updateEntry`
-    const body = {
-        entryId: entryId,
-        drinkType: args.drinkType, 
-        volume: args.volume,
-        measurement: args.measure,
-        caffeinated: args.caffeinated,
-        alcoholic: args.alcoholic
-    }
+    const body = {...args, entryId}
     return await submitApiRequest(url, Methods.post, body, authToken)
+}
+
+
+/**
+ * Send request to Drinks Diary API to remove an existing diary entry
+ * in the diary with the provided ID.
+ * @param {String} authToken is an account bound server authentication token
+ * @param {String} diaryId is the ID of the targeted diary
+ * @param {String} entryId is the ID of the targeted diary entry
+ * @return {Promise} resolves to a JSON containing the response or any errors to catch
+ */
+export const deleteDiaryEntry = async (authToken, diaryId, entryId) => {
+    const url = `${diary_api_endpoint}/${diaryId}/deleteEntry`
+    const body = {entryId: entryId}
+    return await submitApiRequest(url, Methods.post, body, authToken)
+}
+
+
+/**
+ * Send request to Drinks Diary API to retrieve the supported voulmes for diary entries
+ * @param {String} authToken is an account bound server authentication token
+ * @return {Promise} resolves to a JSON containg the response or any errors to catch
+ */
+export const getSupportedVolumes = async (authToken) => {
+    const url = `${diary_api_endpoint}/getVolumes`
+    return await submitApiRequest(url, Methods.get, null, authToken)
 }

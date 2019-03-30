@@ -15,7 +15,7 @@ import LoginForm from '../login-form'
 import RegistrationForm from '../registration-form'
 
 import HomeView from '../home-view'
-import DiaryView from '../presenters/diary-view'
+import DiaryView from '../diary-view'
 import AccountView from '../account-view'
 import DiaryCreationForm from '../diary-creation-form';
 // Style dependencies

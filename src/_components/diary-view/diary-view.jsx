@@ -3,16 +3,14 @@ import React from 'react';
 import { Switch, Route, withRouter} from 'react-router-dom';
 // Redux Imports
 import { connect } from 'react-redux';
-import { setActiveDiary } from '../../../_redux/actions/diary.actions'
-// Service imports
-import { getUserDiary } from '../../../_services/diary.service'
+import { setActiveDiary } from '../../_redux/actions/diary.actions'
 // Component imports
-import { SecureRoute } from '../../routes';
-import DiaryLog from '../../diary-log';
-import { CreateEntryForm, EditEntryForm } from '../../diary-entry-form'
+import { SecureRoute } from '../routes';
+import DiaryLog from '../diary-log';
+import EntryForm from '../diary-entry-form'
 // Style Imports
 import Style from './diary-view.module.scss';
-import StatusStyle from '../../../_helpers/style-utility/status-indicator.module.scss'
+import StatusStyle from '../../_helpers/style-utility/status-indicator.module.scss'
 
 
 class DiaryView extends React.Component {
@@ -28,13 +26,13 @@ class DiaryView extends React.Component {
             <Switch>
                 <SecureRoute exact={true} path={this.props.match.url} component={DiaryLog} />
                 <SecureRoute path={`${this.props.match.url}/create`} render={match => (
-                    <CreateEntryForm 
+                    <EntryForm 
                         match={match}
                         diaryId={this.props.match.params.diaryId} 
                     />
                 )} />
                 <SecureRoute path={`${this.props.match.url}/edit`} render={match => (
-                    <EditEntryForm
+                    <EntryForm
                         match={match}
                         diaryId={this.props.match.params.diaryId} 
                     />

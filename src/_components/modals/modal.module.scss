@@ -8,7 +8,7 @@
     align-items: center;
     justify-content: center;
 
-    background-color: rgba(grey, 0.6);
+    background-color: rgba(lightgray, 0.4);
     
     position: absolute;
     z-index: 5;
@@ -35,9 +35,11 @@
         }
 
         .modalBody {
-            min-height: 200px;
             box-sizing: border-box;
-            padding: 5px 3px;
+            padding: 40px 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
         .modalActions {

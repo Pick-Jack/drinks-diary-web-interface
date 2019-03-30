@@ -41,17 +41,42 @@ export function diary(state=defaultState, action) {
             })
             return { 
                 ...state, 
-                entries: entries
+                entries: entries,
+                success: true
             }
 
-        case "UPDATE-DIARY-ENTRIES":
+        case "UPDATE-DIARY-ENTRY":
             var entries = update(state.entries, {
-                [action.payload.entry._id]: {$set: action.payload.entry}
+                [action.payload._id]: {$set: action.payload}
+            })
+            return {
+                ...state,
+                entries: entries,
+                success: true
+            }
+
+        case "DELETE-DIARY-ENTRY":
+            var entries = update(state.entries, { 
+                [action.payload.entryId]: { $set: undefined }
             })
             return {
                 ...state,
                 entries: entries
             }
+
+        case "SET-DIARY-ERROR":
+            return {
+                ...state,
+                error: action.payload
+            }
+
+        case "UNSET-DIARY-ERROR":
+            const {error, ...noErrorState} = state
+            return noErrorState
+
+        case "RESET-DIARY-SUCCESS-STATUS":
+            const {success, ...noSuccessState} = state
+            return noSuccessState
 
         default:
             return state;

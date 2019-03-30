@@ -6,32 +6,42 @@ import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux';
 // Component imports
 import { DiaryList } from '../diary-list'
-import DiaryView from '../presenters/diary-view'
+import DiaryView from '../diary-view'
 //Style import 
 import Style from './home-view.module.scss'
 
 
 class HomeView extends React.Component {
     
-    componentDidMount() {
-
-    }
     
     render() {
         if (this.props.platform === "DESKTOP") {
+            var DiaryViewJsx;
+            if (this.props.diaryInfo.diaryId) {
+                // Display diary view when there is a selected diary
+                DiaryViewJsx = DiaryView
+            } else {
+                // Display prompt to select diary if none selected
+                DiaryViewJsx = () => (
+                    <div className={Style.noDiary}>
+                        <i className="fa fa-arrow-left"></i>
+                        <h3>Please select a diary to display</h3>
+                    </div>
+                )
+            }
+
             return (
                 <div id={Style.desktopHomeView}>
-
                     <div className={Style.diarySelection}>
                         <DiaryList />
                     </div>
                     
                     <div className={Style.diaryView}>
-                        <DiaryView />
+                        <DiaryViewJsx />
                     </div>
-
                 </div>
             )
+
         } else if (this.props.platform === "MOBILE") {
             return (
                 <div id={Style.mobileHomeView}>
@@ -47,13 +57,8 @@ class HomeView extends React.Component {
 const mapStateToProps = (state) => {
     return {
         platform: state.app.platform,
+        diaryInfo: state.diary.info
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        
-    }
-}
-
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(HomeView))
+export default withRouter(connect(mapStateToProps)(HomeView))
