@@ -169,3 +169,7 @@ export const unsetDiaryError = () => {
 export const resetDiarySuccessStatus = () => {
     return {type: "RESET-DIARY-SUCCESS-STATUS"}
 }
+
+export const clearDiaryState = () => {
+    return {type: "RESET-ALL"};
+}

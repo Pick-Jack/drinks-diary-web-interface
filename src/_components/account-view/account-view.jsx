@@ -1,14 +1,18 @@
 // React Imports
 import React from 'react';
+import update from 'react-addons-update'
 import { Link, withRouter } from 'react-router-dom';
 // Redux Imports
 import { connect } from 'react-redux';
-import { setBackOption, setNavOptions } from '../../_redux/actions/app.actions.js';
+import { setBackOption } from '../../_redux/actions/app.actions.js';
 // Service imports
 import { getAccountDetails } from "../../_services/users.service"
+// Component imports
+import AccountEditModal from './account-edit-modal'
 // Style Imports
 import Style from './account-view.module.scss';
 import ButtonStyle from '../../_helpers/style-utility/buttons.module.scss'
+// Error imports
 import { UnexpectedPlatformError } from '../../_helpers/errors/index.js';
 // Moment
 import * as moment from 'moment'
@@ -19,12 +23,13 @@ class AccountView extends React.Component {
     constructor(props) {
         super(props)
 
-        this.state = {}
+        this.state = {
+            displayEditModal: false,
+            userDetails: {}
+        }
 
         // Set back location
         this.props.setBackOption(this.props.location.state.prevLocation)
-        // Set nav options
-        this.props.setNavOptions([])
     }
 
     componentDidMount() {
@@ -37,48 +42,91 @@ class AccountView extends React.Component {
                     const dob = moment(new Date(response.response.dob))
                     var age = currentDate.diff(dob, 'years')
 
-                    this.setState({ ...response.response, dob, age })
+                    this.setState({userDetails: { ...response.response, dob, age }})
                 }
             })
     }
 
+    onChangeEmail = (event) => {
+        this.setState(update(this.state, {
+            userDetails: {
+                email: { $set: event.target.value }
+            }
+        }))
+    }
+
+    toggleEditModal = () => {
+        this.setState({displayEditModal: !this.state.displayEditModal})
+    }
+
+    onUpdateAccountDetails = () => {
+
+    }
+
     render() {
-        if (Object.keys(this.state).length > 0) {
+        if (Object.keys(this.state.userDetails).length > 0) {
             if (this.props.platform === "DESKTOP") {
                 return(
-                    <div id={Style.accountView}>
-                        <div className={Style.overview}>
-                            <img />
-                            
-                            <div className={Style.info}>
-                                <h3>{`${this.state.forename} ${this.state.surname}`}</h3>
-                                <h3>{`${this.state.gender} - ${this.state.age} (Born: ${this.state.dob.format("DD-MM-YYYY")})`}</h3>
-                            </div>
-                            
-                        </div>
-        
-                        <div className={Style.account}>
-                            <div className={Style.details}>
-                                <h3>Account Details</h3>
-                                <div className={Style.divider}></div>
-        
-                                <div className={Style.infoRow}>    
-                                    <label>E-mail:</label>
-                                    <p>{this.state.email}</p>
+                    <div id={Style.desktopAccountView}>
+                        <div className={Style.col} id={Style.accountOverview}>
+                            <div className={Style.overview}>
+                                <img />
+                                <div className={Style.info}>
+                                    <h2>{`${this.state.userDetails.forename} ${this.state.userDetails.surname}`}</h2>
+                                    <h4>{`${this.state.userDetails.age} (Born: ${this.state.userDetails.dob.format("DD-MM-YYYY")})`}</h4>
+                                    <h4>{`${this.state.userDetails.gender}`}</h4>
                                 </div>
-        
-                                <div className={Style.infoRow}>    
+                            </div>
+
+                            <div className={Style.section}>
+                                <h3 className={Style.sectionHeader}>Account Details</h3>
+
+                                <div className={Style.sectionInfoRow}>
+                                    <label>Role:</label>
+                                    <p>{this.state.userDetails.role}</p>
+                                </div>
+
+                                <div className={Style.sectionInfoRow}>
+                                    <label>E-mail:</label>
+                                    <p>{this.state.userDetails.email}</p>
+                                </div>
+
+                                <div className={Style.sectionInfoRow}>    
                                     <label>Password:</label>
                                     <p>************</p>
                                 </div>
-        
                             </div>
-        
-                            <div className={Style.settings}>
-                                <h3>Account Settings</h3>
-                                <div className={Style.divider}></div>
+
+                            <div className ={Style.section}>
+                                <h3 className={Style.sectionHeader}>Account Options</h3>
+                            
+                                <div className={Style.sectionRow}>
+                                    <button className={ButtonStyle.button} onClick={this.toggleEditModal}>
+                                        <i className="fa fa-pencil-alt"></i> Edit Details
+                                    </button>
+                                    <button className={ButtonStyle.buttonDanger}>
+                                        <i className="fa fa-trash"></i> Delete Account
+                                    </button>
+                                </div>
                             </div>
                         </div>
+
+                        <div className={Style.col} id={Style.accountStatistics}>
+                            <div className={Style.section}>
+                                <h3 className={Style.sectionHeader}>Account Statistics</h3>
+                            </div>
+                        </div>
+
+
+                        {
+                            this.state.displayEditModal &&
+                            <AccountEditModal 
+                                userDetails={this.state.userDetails}
+                                onToggleModal={this.toggleEditModal} 
+                                onSubmit={this.onUpdateAccountDetails} 
+                            />
+                        }
+
                     </div>
                 )
             } 
@@ -113,7 +161,6 @@ class AccountView extends React.Component {
                         <div className={Style.settings}>
                             <h4 className={Style.sectionTitle}>Account Details</h4>
                         </div>
-
                     </div>
                 )
             }
@@ -135,9 +182,6 @@ const mapDispatchToProps = (dispatch) => {
     return {
         setBackOption: (location, type) => {
             dispatch(setBackOption(location, type))
-        },
-        setNavOptions: (optionsArray) => {
-            dispatch(setNavOptions(optionsArray))
         }
     }
 }

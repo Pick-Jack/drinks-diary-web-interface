@@ -16,37 +16,24 @@ class HomeView extends React.Component {
     
     render() {
         if (this.props.platform === "DESKTOP") {
-            var DiaryViewJsx;
-            if (this.props.diaryInfo.diaryId) {
-                // Display diary view when there is a selected diary
-                DiaryViewJsx = DiaryView
-            } else {
-                // Display prompt to select diary if none selected
-                DiaryViewJsx = () => (
-                    <div className={Style.noDiary}>
-                        <i className="fa fa-arrow-left"></i>
-                        <h3>Please select a diary to display</h3>
-                    </div>
-                )
-            }
-
+            // JSX to display when no diary is selected to view
+            const SelectDiaryPrompt = () => (
+                <div className={Style.noDiary}>
+                    <i className="fa fa-arrow-left"></i>
+                    <h3>Please select a diary to display</h3>
+                </div>
+            )
+            
             return (
                 <div id={Style.desktopHomeView}>
-                    <div className={Style.diarySelection}>
-                        <DiaryList />
-                    </div>
-                    
-                    <div className={Style.diaryView}>
-                        <DiaryViewJsx />
-                    </div>
+                    <div className={Style.diarySelection}> <DiaryList /> </div>
+                    <div className={Style.diaryView}> { this.props.diaryInfo.diaryId ? <DiaryView /> : <SelectDiaryPrompt /> } </div>
                 </div>
             )
 
         } else if (this.props.platform === "MOBILE") {
             return (
-                <div id={Style.mobileHomeView}>
-                    <DiaryList />
-                </div>
+                <div id={Style.mobileHomeView}> <DiaryList /> </div>
             )
         } else {
             throw new Error(`Unexpected platform value: ${this.props.platform} for component Home`)

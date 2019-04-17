@@ -78,6 +78,9 @@ export function diary(state=defaultState, action) {
             const {success, ...noSuccessState} = state
             return noSuccessState
 
+        case "RESET-ALL":
+            return {...defaultState};
+
         default:
             return state;
     }

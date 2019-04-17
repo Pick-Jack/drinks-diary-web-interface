@@ -128,6 +128,53 @@
                 margin-right: 25px;
             }
         }
+    }
+}
 
+
+#mobileEntryForm {
+    width: 100%;
+    margin: 3vh 0;
+    
+    form {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+
+        img.entryThumbnail {
+            width: 20vh;
+            height: 20vh;
+            border-radius: 50%;
+            background-color: lightgray;
+        }
+
+        .section {
+            width: 100%;
+            margin: 1vh 0;
+        }
+
+        .sectionTitle {
+            width: 100%;
+            margin: 2vh 0;
+            border-bottom: 1px solid $theme-color;
+            h3 { margin: 0 3px; }
+        }
+
+        .formActions {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            box-sizing: border-box;
+            margin-top: 25px;
+            padding: 0 2vw;
+    
+            .actionsLeft {
+                a, Button {
+                    margin-right: 25px;
+                }
+            }
+        }
+        
     }
 }

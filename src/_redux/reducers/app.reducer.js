@@ -40,6 +40,22 @@ export function app(state=defaultState, action) {
                 navOptions: action.payload
             }
 
+        case "APP_SET_ERROR":
+            return {
+                ...state,
+                errorState: {
+                    code: action.payload.code,
+                    error: action.payload.error
+                }
+            }
+
+        case "APP_UNSET_ERROR": 
+            var { errorState, ...newState } = state
+            return {
+                ...newState
+            }
+
+
         default:
             return state;
     }

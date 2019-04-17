@@ -326,7 +326,98 @@ class EntryForm extends React.Component {
         }
         else if (this.props.platform === "MOBILE") {
             return (
-                <div></div>
+                <div id={Style.mobileEntryForm}>
+                    <form onSubmit={(event) => this.onSubmit(event)}>
+                        
+                        <img className={Style.entryThumbnail} />
+                        
+                        {/* General drink entry details: name, brand, volume*/}
+                        <div className={Style.section}>
+                            <div className={FormStyle.inputGroup}>
+                                <label>Drink Name:</label>
+                                <input className={FormStyle.input} type="text" 
+                                placeholder="drink name..." value={this.state.formValues.drinkName} 
+                                onChange={(event) => this.onChangeInput(event, "drinkName")} required />
+                            </div>
+
+                            <div className={FormStyle.inputGroup}>
+                                <label>Brand (Optional):</label>
+                                <input className={FormStyle.input} type="text" 
+                                placeholder="brand..." value={this.state.formValues.brand} 
+                                onChange={(event) => this.onChangeInput(event, "brand")} />
+                            </div>
+
+                            <div className={FormStyle.inputGroup}>
+                                <label>Volume:</label>
+                                <VolumeSelector onChange={this.onChangeVolumeValues} required={true} 
+                                volume={this.state.formValues.volume.value} measure={this.state.formValues.volume.measure} />
+                            </div>
+                        </div>
+
+                        {/* Caffeine form inputs : status, content*/}
+                        <div className={Style.section}>
+                            <div className={Style.sectionTitle}><h3>Caffeine</h3></div>
+
+                            <div className={FormStyle.inputGroup}>
+                                <label>Contains Caffeine:</label>
+                                <select className={FormStyle.input} value={this.state.formValues.caffeine.status} 
+                                onChange={(event) => this.onChangeCaffeineValues(event, "status")}>
+                                    <option value="" disabled>-- select an option --</option>
+                                    <option value={false}>Decaf</option>
+                                    <option value={true}>Caffeinated</option>
+                                </select>
+                            </div>
+
+                            <div className={FormStyle.inputGroup}>
+                                <label>Caffeine Content:</label>
+                                <input className={FormStyle.input} type="number" disabled={!this.state.caffeineContentEnabled}
+                                placeholder="caffeine content..."  value={this.state.formValues.caffeine.content} 
+                                onChange={(event) => this.onChangeCaffeineValues(event, "content")} />
+                            </div>
+                        </div>
+
+                        {/* Alcohol form inputs : status, percentage */}
+                        <div className={Style.section}>
+                            <div className={Style.sectionTitle}><h3>Alcohol</h3></div>
+
+                            <div className={FormStyle.inputGroup}>
+                                <label>Contains Alcohol:</label>
+                                <select className={FormStyle.input} value={this.state.formValues.alcohol.status} 
+                                onChange={(event) => this.onChangeAlcoholValues(event, "status")}>
+                                    <option value="" disabled>-- select an option --</option>
+                                    <option value={false}>Non-alcoholic</option>
+                                    <option value={true}>Alcoholic</option>
+                                </select>
+                            </div>
+
+                            <div className={FormStyle.inputGroup}>
+                                <label>Alcohol Percentage:</label>
+                                <input className={FormStyle.input} type="number" disabled={!this.state.alcoholPercentageEnabled}
+                                placeholder="alcohol percentage..."  value={this.state.formValues.alcohol.percentage} 
+                                onChange={(event) => this.onChangeAlcoholValues(event, "percentage")} />
+                            </div>
+                        </div>
+
+                        {/* Form actions */}                        
+                        <div className={Style.formActions}>
+                            <div className={Style.actionsLeft}>
+                                <Link to={`/diary/${this.props.diaryId}`} className={ButtonStyle.buttonWarning}><i className="fa fa-times"></i> Cancel</Link>
+                                { 
+                                    this.props.activeEntry &&
+                                    <button type="button" className={ButtonStyle.buttonDanger} onClick={this.onToggleWarningModal}>
+                                    <i className="fa fa-trash"></i> Delete Entry</button>
+                                }
+                            </div>
+                            <div className={Style.actionsRight}>
+                                <button type="submit" className={ButtonStyle.buttonSuccess}>
+                                    { !this.props.activeEntry && (<div><i className="fa fa-plus"></i> Create</div>) }
+                                    { this.props.activeEntry && (<div><i className="fa fa-check"></i> Submit Changes</div>) }
+                                </button>
+                            </div>
+                        </div>
+
+                    </form>    
+                </div>
             )
         }
     }
@@ -369,56 +460,3 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(EntryForm)
-
-
-/*
-                <h3>{this.props.formTitle}</h3>
-                
-                <div className={Style.formMain}>
-                    <img  />
-
-                    <div className={Style.inputs}>
-                        <div className={FormStyle.inputGroup}>
-                            <label>Drink:</label>
-                            <input className={FormStyle.input} type="text" placeholder="drink name..." value={this.state.drinkName} 
-                            onChange={(event) => this.onChangeInput(event, "drinkName")} required />
-                        </div>
-                        
-                        <div className={FormStyle.inputGroup}>
-                            <label>Volume:</label>
-                            <VolumeSelector 
-                                onChange={this.onChangeVolume} 
-                                volume={this.state.volume.amount}
-                                measurement={this.state.volume.measure} 
-                                required={true} 
-                            />
-                        </div>
-
-                        <div className={FormStyle.inputRow}>
-                            <div className={FormStyle.inputGroup}>
-                                <label>Contains Alcohol:</label>
-                                <select className={FormStyle.input} value={this.state.alcoholic} 
-                                onChange={(event) => this.onChangeInput(event, "alcoholic")}>
-                                    <option value="" disabled>-- select an option --</option>
-                                    <option value={false}>Non-alcoholic</option>
-                                    <option value={true}>Alcoholic</option>
-                                </select>
-                            </div>
-
-                            <div className={FormStyle.inputGroup}>
-                                <label>Contains Caffeine:</label>
-                                <select className={FormStyle.input} value={this.state.caffeinated} 
-                                onChange={(event) => this.onChangeInput(event, "caffeinated")}>
-                                    <option value="" disabled>-- select an option --</option>
-                                    <option value={false}>Decaf</option>
-                                    <option value={true}>Caffeinated</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>  
-                </div>
-
-                <div className={Style.formOptions}>
-                    {this.props.formOptions}
-                </div>
-*/

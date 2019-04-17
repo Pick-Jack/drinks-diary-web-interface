@@ -1,15 +1,17 @@
+import * as moment from 'moment'
 // React Imports
 import React from 'react';
-import { Switch, Route, withRouter} from 'react-router-dom';
+import { Switch, Route, withRouter, Link } from 'react-router-dom';
 // Redux Imports
 import { connect } from 'react-redux';
-import { setActiveDiary } from '../../_redux/actions/diary.actions'
+import { setActiveDiary, clearDiaryState } from '../../_redux/actions/diary.actions'
 // Component imports
 import { SecureRoute } from '../routes';
 import DiaryLog from '../diary-log';
 import EntryForm from '../diary-entry-form'
 // Style Imports
 import Style from './diary-view.module.scss';
+import ButtonStyle from '../../_helpers/style-utility/buttons.module.scss'
 import StatusStyle from '../../_helpers/style-utility/status-indicator.module.scss'
 
 
@@ -18,7 +20,16 @@ class DiaryView extends React.Component {
     constructor(props) {
         super(props)
         this.state = {}
-        this.props.setActiveDiary(this.props.user.authToken, this.props.match.params.diaryId)
+    }
+
+    componentDidMount() {
+        if (this.props.match.params.diaryId) {
+            this.props.setActiveDiary(this.props.user.authToken, this.props.match.params.diaryId)
+        }
+    }
+
+    componentWillUnmount() {
+        this.props.clearDiaryState()
     }
 
     render() {
@@ -37,11 +48,6 @@ class DiaryView extends React.Component {
                         diaryId={this.props.match.params.diaryId} 
                     />
                 )} />
-
-
-                <Route path={`${this.props.match.url}/exerciseLog`} />
-                <Route path={`${this.props.match.url}/exerciseLog/create`} />
-                <Route path={`${this.props.match.url}/exerciseLog/edit`} />
             </Switch>
         )
     
@@ -49,14 +55,31 @@ class DiaryView extends React.Component {
             return (
                 <div id={Style.desktopDiaryView}>
                     <div className={Style.viewHeader}>
-                        <h1>{this.props.diaryInfo.diaryName}</h1>
-
-                        <div className={StatusStyle.statusIndicator}>
-                            {(this.props.diaryInfo.status === "Active") && <div className={StatusStyle.iconSuccess}></div>}
-                            {(this.props.diaryInfo.status === "Pending") && <div className={StatusStyle.iconWarning}></div>}
-                            {(this.props.diaryInfo.status === "Complete") && <div className={StatusStyle.iconDanger}></div>}
-                            <h3>{this.props.diaryInfo.status}</h3>
+                        <div className={Style.title}>
+                            <h2>Diary: {this.props.diaryInfo.diaryName}</h2>
+                            <h4>Create Entry</h4>
                         </div>
+
+                        <div className={Style.info}>
+
+                            <div className={StatusStyle.statusIndicator}>
+                                {(this.props.diaryInfo.status === "Active") && <div className={StatusStyle.iconSuccess}></div>}
+                                {(this.props.diaryInfo.status === "Pending") && <div className={StatusStyle.iconWarning}></div>}
+                                {(this.props.diaryInfo.status === "Complete") && <div className={StatusStyle.iconDanger}></div>}
+                                <h3>{this.props.diaryInfo.status}</h3>
+                            </div>
+
+                            <div className={Style.dates}>
+                                <h5><i className="fa fa-calendar-plus"></i>{moment(this.props.diaryInfo.startDate).format("Do MMMM YYYY")}</h5>
+                                <h5><i className="fa fa-calendar-times"></i>{moment(this.props.diaryInfo.endDate).format("Do MMMM YYYY")}</h5>
+                            </div>
+
+                            <Link to={`${this.props.match.url}/editdiary`} className={ButtonStyle.button}>
+                                <i className="fa fa-cog"></i>
+                            </Link>
+                        </div>
+
+                        
 
                     </div>
                     
@@ -101,6 +124,9 @@ const mapDispatchToProps = (dispatch) => {
     return {
         setActiveDiary: (authToken, diaryId) => {
             dispatch(setActiveDiary(authToken, diaryId))
+        },
+        clearDiaryState: () => {
+            dispatch(clearDiaryState())
         },
     }
 }

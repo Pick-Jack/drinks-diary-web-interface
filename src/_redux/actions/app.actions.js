@@ -29,3 +29,16 @@ export function setNavOptions(optionsArray) {
         payload: optionsArray
     }
 }
+
+export function setErrorState(error, code) {
+    return {
+        type: "APP_SET_ERROR",
+        payload: { code, error }
+    }
+}
+
+export function clearErrorState() {
+    return {
+        type: "APP_UNSET_ERROR"
+    }
+}

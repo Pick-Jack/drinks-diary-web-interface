@@ -1,4 +1,9 @@
 
+// Redux imports
+import { store } from '../_redux/store'
+import { setErrorState } from '../_redux/actions/app.actions'
+import { logOut } from '../_redux/actions/user.actions'
+
 
 // Defininition of Enum for handled request methods by API
 export const Methods = Object.freeze({
@@ -29,21 +34,26 @@ export const submitApiRequest = (url, method, body, authToken) => {
                         case 200:
                         case 201:
                             resolve({ error: false, response: responseBody })
+                            break
                         case 400:
                             resolve({ error: true, response: responseBody })
+                            break
                         case 401:
+                            store.dispatch(logOut(responseBody, 401))
+                            // TODO: flash message? Your session has expired?
                             break;
                         case 403:
+                            store.dispatch(setErrorState(responseBody, 403))
                             break;
                         case 404:
-                            break;
-                        case 500:
+                            store.dispatch(setErrorState(responseBody, 404))
                             break;
                         default:
+                            store.dispatch(setErrorState(responseBody, 500))
                             break;
                     }
                 })
-                .catch(error => { console.log(error)})
+                .catch(error => { throw error })
             })
             .catch(error => {
                 reject(error)

@@ -3,13 +3,14 @@ import React from 'react';
 // Redux dependencies
 import { connect } from 'react-redux';
 import { logOut } from '../../_redux/actions/user.actions'
-import { setPlatformDesktop, setPlatformMobile } from '../../_redux/actions/app.actions.js';
+import { setPlatformDesktop, setPlatformMobile, setErrorState } from '../../_redux/actions/app.actions.js';
 // Router dependencies
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 // Component dependencies
 import Layout from '../layout';
 import { SecureRoute } from '../routes';
 import ErrorBoundary from '../error-boundary';
+import ErrorView from '../error-view';
 
 import LoginForm from '../login-form'
 import RegistrationForm from '../registration-form'
@@ -79,7 +80,11 @@ class App extends React.Component {
                         <ErrorBoundary>
                             <Switch>
                                 {RouteSet}
-                                <Route render={ ({match}) => (<h3>404 Not found</h3>) } />
+                                <Route path={"/error"} component={ErrorView} />
+                                <Route render={ ({match}) => {
+                                    this.props.setErrorState(new Error(), 404)
+                                    return <div></div>
+                                } } />
                             </Switch>
                         </ErrorBoundary>
                     </Layout>
@@ -105,6 +110,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         submitLogOut: () => {
             dispatch(logOut())
+        },
+        setErrorState: (error, code) => {
+            dispatch(setErrorState(error, code))
         }
     }
 }
