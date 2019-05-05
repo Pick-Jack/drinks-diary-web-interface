@@ -9,6 +9,7 @@ import { setActiveDiary, clearDiaryState } from '../../_redux/actions/diary.acti
 import { SecureRoute } from '../routes';
 import DiaryLog from '../diary-log';
 import EntryForm from '../diary-entry-form'
+import DiaryConfigurationForm from '../diary-management/diary-configuration-form'
 // Style Imports
 import Style from './diary-view.module.scss';
 import ButtonStyle from '../../_helpers/style-utility/buttons.module.scss'
@@ -36,17 +37,12 @@ class DiaryView extends React.Component {
         const Routes = () => (
             <Switch>
                 <SecureRoute exact={true} path={this.props.match.url} component={DiaryLog} />
+                <SecureRoute exact={true} path={`${this.props.match.url}/edit_diary`} component={DiaryConfigurationForm} />
                 <SecureRoute path={`${this.props.match.url}/create`} render={match => (
-                    <EntryForm 
-                        match={match}
-                        diaryId={this.props.match.params.diaryId} 
-                    />
+                    <EntryForm match={match} diaryId={this.props.match.params.diaryId} />
                 )} />
                 <SecureRoute path={`${this.props.match.url}/edit`} render={match => (
-                    <EntryForm
-                        match={match}
-                        diaryId={this.props.match.params.diaryId} 
-                    />
+                    <EntryForm match={match} diaryId={this.props.match.params.diaryId} />
                 )} />
             </Switch>
         )
@@ -57,7 +53,7 @@ class DiaryView extends React.Component {
                     <div className={Style.viewHeader}>
                         <div className={Style.title}>
                             <h2>Diary: {this.props.diaryInfo.diaryName}</h2>
-                            <h4>Create Entry</h4>
+                            <h4>{this.props.pageTitle}</h4>
                         </div>
 
                         <div className={Style.info}>
@@ -74,8 +70,8 @@ class DiaryView extends React.Component {
                                 <h5><i className="fa fa-calendar-times"></i>{moment(this.props.diaryInfo.endDate).format("Do MMMM YYYY")}</h5>
                             </div>
 
-                            <Link to={`${this.props.match.url}/editdiary`} className={ButtonStyle.button}>
-                                <i className="fa fa-cog"></i>
+                            <Link to={`${this.props.match.url}/edit_diary`} className={ButtonStyle.button}>
+                                <i className="fa fa-cog"></i> Settings
                             </Link>
                         </div>
 
@@ -116,6 +112,7 @@ const mapStateToProps = (state) => {
     return {
         user: state.user,
         diaryInfo: state.diary.info,
+        pageTitle: state.diary.activeTitle,
         platform: state.app.platform
     }
 }

@@ -8,90 +8,91 @@ import { connect } from 'react-redux';
 import Style from './diary-entry.module.scss';
 import ButtonStyle from '../../_helpers/style-utility/buttons.module.scss'
 import { UnexpectedPlatformError } from '../../_helpers/errors';
+import * as Moment from 'moment';
 
 
-const DiaryEntry = (props) => {
-    if (props.platform === "DESKTOP") {
-        return (
-            <div className={props.expanded ? Style.diaryEntryExpanded : Style.diaryEntry} onClick={ () => props.onClick(props.entryId)}>
-                <div className={Style.expandRow1}>
-                    <div className={Style.col1}>
-                        <div className={Style.entryThumbnail}>
-                            <img src={props.thumbnail} />
+
+class DiaryEntry extends React.Component {
+
+    constructor(props) {
+        super(props)
+        this.state = {expand: false}
+    }
+
+    toggleExpand = () => {
+        this.setState({ expand: !this.state.expand })
+    }
+
+    render() {
+        if (this.props.platform === "DESKTOP") {
+            return (
+                <div className={this.state.expand ? Style.diaryEntryExpanded : Style.diaryEntry} onClick={ () => this.toggleExpand()}>
+                    <div className={Style.expandRow1}>
+                        <div className={Style.col1}>
+    
+                            <div className={Style.entryThumbnail}> 
+                                <img src={this.props.thumbnail} /> 
+                            </div>
+                            
+                            <div className={Style.info}>
+                                <h4>{this.props.entry.drinkName}</h4>
+                                <h5>{`${this.props.entry.volume.amount} ${this.props.entry.volume.measure}`}</h5>
+                            </div>
+                        </div>
+    
+                        <div className={Style.col2}>
+                            <button onClick={() => this.props.onEdit(this.props.entry._id)} className={ButtonStyle.buttonXS}><i className="fa fa-pencil-alt"></i> Edit</button>
+                        </div>
+                    </div>
+    
+                    <div className={Style.expandRow2}>
+                        <h6>{new Moment(this.props.entry.date).format("HH:mm")}</h6>
+                        <div className={Style.statuses}>
+                            {
+                                this.props.entry.containsAlcohol &&
+                                <div className={Style.alchStatus}><p>Alcoholic</p> <i className="fa fa-cocktail"></i></div>
+                            }
+                            {
+                                this.props.entry.containsCaffeine &&
+                                <div className={Style.caffStatus}><p>Caffeinated</p> <i className="fa fa-coffee"></i></div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            )
+        }
+        else if (this.props.platform === "MOBILE") {
+            return (
+                <div className={Style.mobileDiaryEntry} >
+                    <div className={Style.header}>
+                        <p className={Style.time}>{`${this.props.datetime.getHours()}:${this.props.datetime.getMinutes()}`}</p>
+                        <Link to={`${this.props.match.url}/edit`} className={ButtonStyle.buttonXS} onClick={() => this.props.onEdit(this.props.entryId)}>
+                            <i className="fa fa-pencil-alt"></i> Edit
+                        </Link>
+                    </div>
+                    <div className={Style.main}>
+                        
+                        <img src={this.props.thumbnail} />
+    
+                        <div className={Style.info}>
+                            <h4>{this.props.drinkName}</h4>
+                            <h6>{this.props.volume}</h6>
                         </div>
                         
-                        <div className={Style.info}>
-                            <h4>{props.drinkName}</h4>
-                            <h5>{props.volume}</h5>
-                        </div>
                     </div>
-
-                    <div className={Style.col2}>
-                        <button onClick={() => props.onEdit(props.entryId)} className={ButtonStyle.buttonXS}><i className="fa fa-pencil-alt"></i> Edit</button>
+                    <div className={Style.footer}>
+                        {this.props.alcoholic && <p><i className="fa fa-cocktail"></i> Alcoholic</p>}
+                        {this.props.caffeinated && <p><i className="fa fa-coffee"></i> Caffeinated</p>}
                     </div>
                 </div>
-
-                <div className={Style.expandRow2}>
-                    <h6>{`${props.datetime.getHours()}:${props.datetime.getMinutes()}`}</h6>
-                    <div className={Style.statuses}>
-                        {
-                            props.alcoholic &&
-                            <div className={Style.alchStatus}><p>Alcoholic</p> <i className="fa fa-cocktail"></i></div>
-                        }
-                        {
-                            props.caffeinated &&
-                            <div className={Style.caffStatus}><p>Caffeinated</p> <i className="fa fa-coffee"></i></div>
-                        }
-                    </div>
-                </div>
-            </div>
-        )
-    }
-    else if (props.platform === "MOBILE") {
-        return (
-            <div className={Style.mobileDiaryEntry} >
-                <div className={Style.header}>
-                    <p className={Style.time}>{`${props.datetime.getHours()}:${props.datetime.getMinutes()}`}</p>
-                    <Link to={`${props.match.url}/edit`} className={ButtonStyle.buttonXS} onClick={() => props.onEdit(props.entryId)}>
-                        <i className="fa fa-pencil-alt"></i> Edit
-                    </Link>
-                </div>
-                <div className={Style.main}>
-                    
-                    <img src={props.thumbnail} />
-
-                    <div className={Style.info}>
-                        <h4>{props.drinkName}</h4>
-                        <h6>{props.volume}</h6>
-                    </div>
-                    
-                </div>
-                <div className={Style.footer}>
-                    {props.alcoholic && <p><i className="fa fa-cocktail"></i> Alcoholic</p>}
-                    {props.caffeinated && <p><i className="fa fa-coffee"></i> Caffeinated</p>}
-                </div>
-            </div>
-        )
-    }
-    else {
-        throw new UnexpectedPlatformError(props.platform, "DiaryEntry")
+            )
+        }
     }
 }
+
 
 const mapStateToProps = (state) => ({
     platform: state.app.platform
 })
 
 export default connect(mapStateToProps)(DiaryEntry)
-
-
-    /*
-        <div className={Style.desktopDiaryEntry} onClick={() => props.onClick(true, props)}>
-            <div className={Style.entryLeft}>
-                <img src={props.thumbnail}/>
-                <h6>{`${props.datetime.getHours()}:${props.datetime.getMinutes()}`}</h6>     
-            </div>
-
-            <h4>{props.drinkName}</h4>
-        </div>
-    */

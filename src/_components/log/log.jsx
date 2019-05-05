@@ -6,62 +6,97 @@ import { connect } from 'react-redux'
 import Style from './log.module.scss'
 import ButtonStyle from '../../_helpers/style-utility/buttons.module.scss'
 import { UnexpectedPlatformError } from '../../_helpers/errors';
-
+import * as Moment from 'moment';
 
 class Log extends React.Component {
 
     constructor(props) {
         super(props)
-    }
 
-    getDisplayDate = () => {
-        if (this.props.activeDate) {
-            // Format date string for display
-            var dateString = `${this.props.activeDate.getDate()}-${this.props.activeDate.getMonth()}-${this.props.activeDate.getFullYear()}`
-            // Display today for current date
-            var currentDate = (new Date).setHours(0,0,0,0)
-            var activeDate = (new Date(this.props.activeDate)).setHours(0,0,0,0)
-            if (currentDate === activeDate) { return `Today (${dateString})` } 
-            else { return dateString }
+        this.state = {
+            prevEnabled: false,
+            nextEnabled: false,
+            displayedDatetime: undefined,
+            displayedEntries: undefined
         }
     }
 
+    componentDidMount() {
+        if (!this.state.displayedDatetime) {
+            this.updateLogState("initialise")
+        }
+    }
 
-    singleLogView = (props) => (
-        <div className={Style.singleLogView}>
-            <div className={Style.logDate}>  
-                <h4>{this.getDisplayDate()}</h4>
-            </div>
-    
-            <div className={Style.logMain}>
-                {props.children}
-            </div>
-        </div>
-    )
+    updateLogState = (action) => {
+        const startDatetime = new Moment(this.props.startDate)
+        const endDatetime = new Moment(this.props.endDate)
+
+        // Set the datetime to display in the view
+        var newDisplayDatetime;
+        switch(action) {
+            case "initialise":
+                if (new Moment().isBetween(startDatetime, endDatetime)) { newDisplayDatetime = new Moment() } 
+                else { newDisplayDatetime = endDatetime }
+                break;
+            case "next":
+                newDisplayDatetime = this.state.displayedDatetime.add(1, 'days')
+                break;
+            case "previous":
+                newDisplayDatetime = this.state.displayedDatetime.subtract(1, 'days')
+                break;
+            default:
+                throw new Error("Unexpected action to process while updating Log state")
+        }
+
+        // Update page button states
+        const nextEnabled = (new Moment(newDisplayDatetime).isBefore(endDatetime))
+        const prevEnabled = (new Moment(newDisplayDatetime).subtract(1, "days").isAfter(startDatetime))
+
+        // Retrieve the entries to display
+        const entries = this.props.entryFunc(newDisplayDatetime.toDate())
+
+        this.setState({nextEnabled, prevEnabled, displayedDatetime: newDisplayDatetime, displayedEntries: entries})
+    }
 
     render() {
-        const nextEnabled = !(this.props.activeDate < this.props.endDate)
-        const prevEnabled = !(this.props.activeDate > this.props.startDate)
+        // If the dispalyed datetime has not been defined, return nothing
+        // the lifecycle function componentDidMount will then initialise
+        // the value.
+        if (!this.state.displayedDatetime) { return (<div></div>) }
 
         if (this.props.platform === "DESKTOP") {
-            const LogView = this.singleLogView
             return (
                 <div className={Style.log}>
                     <div className={Style.logActions}>
-                        <button className={ButtonStyle.buttonSM} onClick={this.props.onPrev} disabled={prevEnabled}>
-                            <i className="fa fa-arrow-left"></i> Previous
-                        </button>
+                        <button className={ButtonStyle.buttonSM} onClick={() => this.updateLogState("previous")} disabled={!this.state.prevEnabled}>
+                            <i className="fa fa-arrow-left"></i> Previous </button>
 
-                        <button className={ButtonStyle.buttonSM} onClick={this.props.onNext} disabled={nextEnabled}>
-                            Next <i className="fa fa-arrow-right"></i>
-                        </button>
+                        <button className={ButtonStyle.buttonSM} onClick={() => this.updateLogState("next")} disabled={!this.state.nextEnabled}>
+                            Next <i className="fa fa-arrow-right"></i> </button>
                     </div>
 
-                    <LogView>{this.props.entries}{this.props.children}</LogView>
+                    <div className={Style.logDate}>
+                        <h4>{ this.state.displayedDatetime.format("DD-MM-YYYY") == Moment().format("DD-MM-YYYY") ? 
+                        `Today (${this.state.displayedDatetime.format("DD-MM-YYYY")})` :
+                        this.state.displayedDatetime.format("DD-MM-YYYY") }</h4>
+                    </div>
+                
+                    {!this.state.displayedDatetime.isAfter(new Moment()) ? 
+                    (<div className={Style.logMain}>{this.state.displayedEntries}{this.props.children}</div>) :
+                    (<div className={Style.futureEntry}>
+                        <div className={Style.message}>
+                            <h3><i className="fa fa-calendar-times"></i> Not quite yet...</h3>
+                            <h5>You can create an entry on this date when we get there.</h5>
+                        </div>
+                    </div>)}
+                     
                 </div>
             )
         }
         else if (this.props.platform === "MOBILE") {
+            const nextEnabled = !(this.props.activeDate < this.props.endDate)
+            const prevEnabled = !(this.props.activeDate > this.props.startDate)
+
             return (
                 <div className={Style.mobileLogView}>
 

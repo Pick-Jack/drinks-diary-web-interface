@@ -29,7 +29,7 @@ export const setActiveDiary = (authToken, diaryId) => {
                     }
 
                     dispatch({
-                        type: "SET-DIARY-INFO",
+                        type: "SET-ACTIVE-DIARY",
                         payload: {
                             ...diary.info,
                             startDate: startDate,
@@ -59,24 +59,21 @@ export const setActiveDiary = (authToken, diaryId) => {
 }
 
 
+export const updateActiveTitle = (title) => {
+    return { type: "SET-ACTIVE-TITLE", payload: title }
+}
+
+
 export const updateActiveDate = (newDate) => {
-    return {
-        type: "SET-ACTIVE-DATE",
-        payload: new Date(newDate)
-    }
+    return { type: "SET-ACTIVE-DATE", payload: new Date(newDate) }
 }
 
 
 export const updateActiveEntry = (entryId) => {
     if (typeof entryId !== "undefined") {
-        return {
-            type: "SET-ACTIVE-ENTRY",
-            payload: entryId
-        }
+        return { type: "SET-ACTIVE-ENTRY", payload: entryId }
     } else {
-        return {
-            type: "UNSET-ACTIVE-ENTRY"
-        }
+        return { type: "UNSET-ACTIVE-ENTRY" }
     }
 }
 
@@ -169,6 +166,7 @@ export const unsetDiaryError = () => {
 export const resetDiarySuccessStatus = () => {
     return {type: "RESET-DIARY-SUCCESS-STATUS"}
 }
+
 
 export const clearDiaryState = () => {
     return {type: "RESET-ALL"};

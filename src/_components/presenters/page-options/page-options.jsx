@@ -3,7 +3,7 @@ import React from 'react'
 // Router imports
 import { Link } from 'react-router-dom'
 // Component imports
-import Modal from '../../modals'
+import Modal, {HelpModal} from '../../modals'
 // Style imports
 import Style from './page-options.module.scss'
 import ButtonStyle from '../../../_helpers/style-utility/buttons.module.scss'
@@ -13,16 +13,27 @@ class PageOptions extends React.Component {
     
     constructor(props) {
         super(props)
-        this.state = { displayHelp: false }
+        this.state = { displayHelp: false, displayLogout: false }
     }
 
     onToggleHelp = () => {
         this.setState({displayHelp: !this.state.displayHelp})
     }
 
+    onToggleLogout = () => {
+        this.setState({displayLogout: !this.state.displayLogout})
+    }
+
     render() {
         const helpModalActions = (
-            <div><button className={ButtonStyle.button} onClick={this.onToggleHelp}>Close</button></div>
+            <div style={{display:"flex",flexDirection:"row-reverse",marginRight:"10px"}}>
+            <button className={ButtonStyle.button} onClick={this.onToggleHelp}>Close</button></div>
+        )
+
+        const logoutModalActions = (
+            <div style={{display:"flex",flexDirection:"row-reverse",marginRight:"10px"}}>
+            <Link to="/logOut" className={ButtonStyle.buttonDanger}>
+            <i className="fas fa-sign-out-alt"></i> Logout</Link></div>
         )
 
         return (
@@ -37,15 +48,24 @@ class PageOptions extends React.Component {
                     <a className={Style.option} onClick={this.onToggleHelp}>
                         <i className="fa fa-question"></i><p>Help</p>
                     </a>
-                    <Link to="/logOut" className={Style.optionSignOut}>
+                    <a className={Style.optionSignOut} onClick={() => this.onToggleLogout()}>
                         <i className="fas fa-sign-out-alt"></i><p>Log Out</p>
-                    </Link>
+                    </a>
                 </div>
                 
                 { 
                     // Display help Modal
-                    this.state.displayHelp &&
-                    <Modal title={"Help"} onClose={this.onToggleHelp} actions={helpModalActions}></Modal>
+                    !this.state.displayHelp &&
+                    //<Modal title={"Help"} onClose={this.onToggleHelp} actions={helpModalActions}></Modal>
+                    <HelpModal closeModal={this.onToggleHelp} />
+                }
+
+                { 
+                    // Display Logout Modal
+                    this.state.displayLogout &&
+                    <Modal title={"Logout?"} onClose={this.onToggleLogout} actions={logoutModalActions}>
+                        <h5 style={{margin:"0px"}}> Are you sure you want to log-out?</h5>
+                    </Modal>
                 }
             </div>
         )

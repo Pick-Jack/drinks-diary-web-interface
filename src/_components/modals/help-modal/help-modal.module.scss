@@ -1,0 +1,25 @@
+
+@import "../../../_helpers/style-mixins/_colors";
+
+
+.modalActions {
+    display: flex;
+    justify-content: space-between;
+}
+
+
+.guideList {
+    margin-left: 50px;
+    
+    li.guideOption {
+        margin: 10px 0;
+        font-size: 1.2em;
+        color: $theme-color;
+    }
+
+    li.guideOption:hover {
+        cursor: pointer;
+        text-decoration: underline;
+    }
+
+}

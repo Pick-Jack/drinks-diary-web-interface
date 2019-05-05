@@ -3,8 +3,8 @@
 
 .desktopDiaryLog {
     display: flex;
-    align-items: flex-end;
     position: absolute;
+    align-items: flex-end;
     top: 0; bottom: 0; left: 0; right: 0;
 
     .createEntry {

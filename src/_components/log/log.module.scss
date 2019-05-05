@@ -16,16 +16,8 @@
     width: 100%;
     height: 100%;
     display: flex;
+    position: relative;
     flex-direction: column;
-
-    .logActions {
-        display: flex;
-        flex: 0 0 auto;
-        align-items: flex-end;
-        justify-content: space-between;
-        box-sizing: border-box;
-        padding: 5px 15px;
-    }
 
     .prev {
         @extend %navButton;
@@ -37,32 +29,65 @@
         border-left: 1px solid black;
     }
 
-    .singleLogView {
-        flex: 1 1 auto;
-        display : flex;
+    //.singleLogView {
+        //flex: 1 1 auto;
+        //display : flex;
+        //flex-direction: column;
+
+    .logActions {
+        display: flex;
+        //flex: 0 0 auto;
+        align-items: flex-end;
+        justify-content: space-between;
+        box-sizing: border-box;
+        padding: 5px 15px;
+    }
+
+    .logDate {
+        width: 100%;
+        height: 40px;
+        display: flex;
+        //flex: 0 0 auto;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid black;
+        border-right-width: 0;
+        border-left-width: 0;
+    }
+
+    .logMain {
+        flex: 1;
+        display: flex;
+        flex-wrap: wrap;
+        overflow-y: auto;
+        align-items: flex-start;
+        align-content: flex-start;  
+    }
+
+    .futureEntry {
+        flex: 1;
+        display: flex;
         flex-direction: column;
+        background: repeating-linear-gradient(-45deg, 
+        white, white 47px, rgba($theme-color,0.4) 50px);
 
-        .logDate {
-            width: 100%;
-            height: 40px;
+        .message {
             display: flex;
-            flex: 0 0 auto;
             align-items: center;
-            justify-content: center;
-            border: 1px solid black;
-            border-right-width: 0;
-            border-left-width: 0;
-        }
-
-        .logMain {
-            display: flex;
-            flex: 1 1 auto;
-            flex-wrap: wrap;
-            overflow-y: auto;
-            align-items: flex-start;
-            align-content: flex-start;
+            flex-direction: column;
+            
+            margin: 0 27%;
+            margin-top: 150px;
+            
+            padding: 30px;
+            padding-bottom: 50px;
+            
+            border-radius: 3px;
+            border: 1px solid $theme-color;
+            background-color: white;
         }
     }
+
 }
 
 

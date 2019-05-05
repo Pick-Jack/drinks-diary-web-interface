@@ -1,0 +1,29 @@
+
+.main {
+    display: flex;
+    flex-direction: column;
+
+    .row { 
+        display: flex;
+        align-items: center;
+        div.col { margin-right: 50px;}
+    }
+
+    
+    .figure {
+        img {
+            border: 1px solid lightgrey;
+            box-shadow: 1px 2px 5px #aaaaaa;
+        }
+        .caption {
+            opacity: 0.75;
+        }
+    }
+
+    ul, ol { margin-right: 0px; }
+    li { margin: 15px 0; }
+
+
+}
+
+
