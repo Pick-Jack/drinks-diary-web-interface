@@ -1,9 +1,9 @@
 // React imports 
 import React from 'react';
 // Component imports
-import Modal from '../modals'
+import Modal from '../../modals'
 // Style imports
-import ButtonStyles from '../../_helpers/style-utility/buttons.module.scss'
+import ButtonStyles from '../../../_helpers/style-utility/buttons.module.scss'
 
 
 const DeleteEntryModal = (props) => {
@@ -11,7 +11,7 @@ const DeleteEntryModal = (props) => {
     const ModalActions = (
         <div style={{display: "flex", justifyContent: "space-between", padding: "0 15px"}}>
             <button className={ButtonStyles.button} onClick={props.onToggleModal}><i className="fa fa-times"></i> Cancel</button>
-            <button className={ButtonStyles.buttonDanger} onClick={props.onDeleteEntry}><i className="fa fa-trash"></i> Delete Entry</button>
+            <button className={ButtonStyles.buttonDanger} onClick={props.onDelete}><i className="fa fa-trash"></i> Delete Entry</button>
         </div>
     )
 

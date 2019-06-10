@@ -40,7 +40,7 @@ export const submitApiRequest = (url, method, body, authToken) => {
                             break
                         case 401:
                             store.dispatch(logOut(responseBody, 401))
-                            // TODO: flash message? Your session has expired?
+                            store.dispatch(setErrorState(responseBody, 401))
                             break;
                         case 403:
                             store.dispatch(setErrorState(responseBody, 403))
@@ -56,6 +56,7 @@ export const submitApiRequest = (url, method, body, authToken) => {
                 .catch(error => { throw error })
             })
             .catch(error => {
+                console.log(error)
                 reject(error)
             })
     })

@@ -12,8 +12,8 @@ import { SecureRoute } from '../routes';
 import ErrorBoundary from '../error-boundary';
 import ErrorView from '../error-view';
 
-import LoginForm from '../login-form'
-import RegistrationForm from '../registration-form'
+import LoginForm from '../landing/login-form'
+import RegistrationForm from '../landing/registration-form'
 
 import HomeView from '../home-view'
 import DiaryView from '../diary-view'
@@ -76,18 +76,17 @@ class App extends React.Component {
         return(
             <div id={Style.app}>
                 <BrowserRouter>
-                    <Layout>
-                        <ErrorBoundary>
-                            <Switch>
-                                {RouteSet}
-                                <Route path={"/error"} component={ErrorView} />
-                                <Route render={ ({match}) => {
-                                    this.props.setErrorState(new Error(), 404)
-                                    return <div></div>
-                                } } />
-                            </Switch>
-                        </ErrorBoundary>
-                    </Layout>
+                    <ErrorBoundary>
+                        <Switch>
+                            <Route path={"/error"} component={ErrorView} />
+                            <Layout>
+                                <Switch>
+                                    {RouteSet}
+                                    <Route render={ ({match}) => {this.props.setErrorState(new Error(), 404); return <div></div>} } />
+                                </Switch>
+                            </Layout>
+                        </Switch>
+                    </ErrorBoundary>
                 </BrowserRouter>
             </div>
         )

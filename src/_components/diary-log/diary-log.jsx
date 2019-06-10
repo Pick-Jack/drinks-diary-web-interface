@@ -42,13 +42,6 @@ class DiaryLog extends React.Component {
                 // Check diary entry is within the active date
                 if (new Moment(entry.date).format("DD-MM-YYYY") === activeDate.format("DD-MM-YYYY")) {
                     entries.push((
-                        /*
-                        <DiaryEntry key={i} datetime={entry.date} entryId={entry._id} thumbnail={defaultDrink} 
-                            drinkName={entry.drinkType} alcoholic={entry.alcoholic} caffeinated={entry.caffeinated} 
-                            volume={`${entry.volume.amount} ${entry.volume.measure}`} onClick={this.toggleEntryExpand} 
-                            onEdit={this.onEditEntry} match={this.props.match} expanded={expanded}
-                        />
-                        */
                         <DiaryEntry key={i} match={this.props.match}  entry={entry} thumbnail={defaultDrink} 
                             onClick={(entryId) => this.toggleEntryExpand(entryId)} onEdit={this.onEditEntry}
                         />
@@ -89,14 +82,8 @@ class DiaryLog extends React.Component {
         else if (this.props.platform === "MOBILE") {
             return (
                 <div className={Style.mobileDiaryLog}>
-                    <Log 
-                        startDate={this.props.diaryInfo.startDate}
-                        activeDate={this.props.diaryActiveDate}
-                        endDate={this.props.diaryInfo.endDate}
-                        onNext={this.handleNextPage}
-                        onPrev={this.handlePrevPage}
-                        entries={this.generateDiaryEntries()}
-                    >
+                    <Log startDate={this.props.diaryInfo.startDate} endDate={this.props.diaryInfo.endDate} 
+                    entryFunc={(activeDate) => this.generateDiaryEntries(activeDate)}>
                         {
                             this.props.diaryActiveDate && this.props.diaryActiveDate.getTime() === (new Date).setHours(0,0,0,0) &&
                             <Link to={`/diary/${this.props.diaryInfo.diaryId}/create`} className={EntryStyle.mobileDiaryEntryCreate}>

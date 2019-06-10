@@ -22,5 +22,19 @@
         .left { a, button { margin-right: 25px; } }
         .right { a, button { margin-left: 25px; } }
     }
+}
 
+#MobileConfigForm {
+    width: 100%;
+    margin: 4vh 0;
+    padding: 0 2vw;
+    box-sizing: border-box;
+
+    .formOptions {
+        width: 100%;
+        display: flex;
+        justify-content: space-around;
+        box-sizing: border-box;
+        margin-top: 7vh;
+    }
 }

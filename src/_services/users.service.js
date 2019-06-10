@@ -1,7 +1,4 @@
 import { submitApiRequest, Methods } from './service-utils';
-import { ValidationException, UnauthorisedException } from "../_helpers/errors";
-
-
 const users_api_endpoint = `${process.env.REACT_APP_API_URL}/users`
 
 
@@ -12,16 +9,9 @@ const users_api_endpoint = `${process.env.REACT_APP_API_URL}/users`
  * @param (string) password is the password submitted by the client
  * @returns (JSON) the server response
  */
-export function login(email, password) {
-    // Configure request options
-    const requestOptions = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
-    };
-
-    // Submit verification request to API
-    return fetch(`${process.env.REACT_APP_API_URL}/users/verifyCredentials`, requestOptions)
+export const login = async (email, password) => {
+    const url = `${users_api_endpoint}/verifyCredentials`
+    return submitApiRequest(url, Methods.post, { email, password })
 }
 
 
@@ -30,31 +20,19 @@ export function login(email, password) {
  * @param {JSON} args registration arguments
  * @return {Promise} returns a promise which resolves the the response json
  */
-export function register(args) {
+export const register = (args) => {
     // Configure request options
-    const options = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            email: args.email,
-            password: args.password,
-            forename: args.forename,
-            surname: args.surname,
-            gender: args.gender,
-            dob: args.dob
-        })
+    const body = {
+        email: args.email,
+        password: args.password,
+        forename: args.forename,
+        surname: args.surname,
+        gender: args.gender,
+        dob: args.dob
     }
-    
-    // Submit user creation request to API
-    var fetchPromise = fetch(`${process.env.REACT_APP_API_URL}/users/createUser`, options)
-    return fetchPromise.then(
-        response => {
-            return response.json()
-        },
-        error => {
-            throw error
-        }
-    )
+
+    const url = `${users_api_endpoint}/createUser`
+    return submitApiRequest(url, Methods.post, body)
 }
 
 

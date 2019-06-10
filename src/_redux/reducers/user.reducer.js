@@ -8,11 +8,13 @@ if (authToken) {
 export function user(state=initialState, action) {
     switch(action.type) {
         case "LOGIN-SUCCESS":
-            return {
-                ...state, 
-                authToken: action.payload, 
-                isAuthorised: true
-            }
+            return {...state, authToken: action.payload, isAuthorised: true}
+
+        case "SET-USER-ID":
+            return {...state, userId: action.payload}
+
+        case "SET-DISPLAY-NAME":
+            return {...state, displayName: action.payload} 
 
         case "LOG-OUT":
         case "LOGIN-FAILED":

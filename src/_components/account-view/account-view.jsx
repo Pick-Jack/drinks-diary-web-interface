@@ -20,16 +20,10 @@ import * as moment from 'moment'
 
 
 class AccountView extends React.Component {
+    
     constructor(props) {
         super(props)
-
-        this.state = {
-            displayEditModal: false,
-            userDetails: {}
-        }
-
-        // Set back location
-        this.props.setBackOption(this.props.location.state.prevLocation)
+        this.state = { displayEditModal: false, userDetails: {} }
     }
 
     componentDidMount() {
@@ -104,6 +98,9 @@ class AccountView extends React.Component {
                                     <button className={ButtonStyle.button} onClick={this.toggleEditModal}>
                                         <i className="fa fa-pencil-alt"></i> Edit Details
                                     </button>
+                                    <button className={ButtonStyle.button}>
+                                        <i className="fa fa-file-download"></i>Request Account Information
+                                    </button>
                                     <button className={ButtonStyle.buttonDanger}>
                                         <i className="fa fa-trash"></i> Delete Account
                                     </button>
@@ -131,25 +128,23 @@ class AccountView extends React.Component {
                 )
             } 
             else if (this.props.platform === "MOBILE") {
+
                 return (
                     <div className={Style.mobileAccountView}>
                         <div className={Style.info}>
                             <img />
                             <div className={Style.info}>
-                                <h4>{`${this.state.forename} ${this.state.surname}`}</h4>
-                                <h7>{`${this.state.gender} - ${this.state.age} (Born: ${this.state.dob.format("DD-MM-YYYY")})`}</h7>
+                                <h4>{`${this.state.userDetails.forename} ${this.state.userDetails.surname}`}</h4>
+                                <h7>{`${this.state.userDetails.gender} - ${this.state.userDetails.age} (Born: ${this.state.userDetails.dob.format("DD-MM-YYYY")})`}</h7>
                             </div>
                         </div>
 
                         <div className={Style.details}>
-                            <div className={Style.sectionTitle}>
-                                <h4>Account Details</h4>
-                                <Link to={`${this.props.match.url}/editDetails`} className={ButtonStyle.buttonXS}><i className="fa fa-pencil-alt"></i> Edit</Link>
-                            </div>
+                            <h4 className={Style.sectionTitle}>Account Details</h4>
 
                             <div className={Style.infoRow}>    
                                 <label>E-mail:</label>
-                                <p>{this.state.email}</p>
+                                <p>{this.state.userDetails.email}</p>
                             </div>
 
                             <div className={Style.infoRow}>    
@@ -158,8 +153,11 @@ class AccountView extends React.Component {
                             </div>
                         </div>
 
-                        <div className={Style.settings}>
+                        <div className={Style.accountOptions}>
                             <h4 className={Style.sectionTitle}>Account Details</h4>
+                            <button className={ButtonStyle.button}><i className="fa fa-pencil-alt"></i>Change Password</button>
+                            <button className={ButtonStyle.button}><i className="fa fa-file-download"></i>Request Account Information</button>
+                            <button className={ButtonStyle.buttonDanger}><i className="fa fa-trash"></i>Delete Account</button>
                         </div>
                     </div>
                 )
@@ -178,12 +176,4 @@ const mapStateToProps = (state) => ({
     authToken: state.user.authToken
 })
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        setBackOption: (location, type) => {
-            dispatch(setBackOption(location, type))
-        }
-    }
-}
-
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(AccountView))
+export default withRouter(connect(mapStateToProps)(AccountView))

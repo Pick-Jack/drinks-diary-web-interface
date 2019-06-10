@@ -55,14 +55,11 @@ class MessageFlash extends React.Component {
 
         return (
             <div className={flashStyle}>
-                <div className={Style.message}>
-                    <p>{this.props.displayMessage}</p>
-                </div>
-                <div className={Style.close}>
-                    <a onClick={this.closeMessage}><i className="fa fa-times"></i></a>
-                </div>
+                <div className={Style.message}><p>{this.props.displayMessage}</p></div>
+                <div className={Style.close}><a onClick={this.closeMessage}><i className="fa fa-times"></i></a></div>
             </div>
         )
+        
     }
 }
 

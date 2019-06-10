@@ -20,10 +20,8 @@ class ErrorBoundary extends React.Component {
     }
 
     componentDidCatch(error, info) {
-        // TODO : implement interface logging containg stack info
         // Set application error state
         this.props.setErrorState(error, 500)
-        // Redirect user to error page
         this.props.history.push("/error")
     }
     

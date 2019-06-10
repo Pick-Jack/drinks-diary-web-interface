@@ -7,7 +7,6 @@ import { connect } from 'react-redux';
 // Style imports
 import Style from './diary-entry.module.scss';
 import ButtonStyle from '../../_helpers/style-utility/buttons.module.scss'
-import { UnexpectedPlatformError } from '../../_helpers/errors';
 import * as Moment from 'moment';
 
 
@@ -65,24 +64,23 @@ class DiaryEntry extends React.Component {
             return (
                 <div className={Style.mobileDiaryEntry} >
                     <div className={Style.header}>
-                        <p className={Style.time}>{`${this.props.datetime.getHours()}:${this.props.datetime.getMinutes()}`}</p>
-                        <Link to={`${this.props.match.url}/edit`} className={ButtonStyle.buttonXS} onClick={() => this.props.onEdit(this.props.entryId)}>
-                            <i className="fa fa-pencil-alt"></i> Edit
-                        </Link>
+                        <p className={Style.time}>{new Moment(this.props.entry.date).format("HH:mm")}</p>
+                        <Link to={`${this.props.match.url.split("/log")[0]}/edit`} className={ButtonStyle.buttonXS} onClick={() => this.props.onEdit(this.props.entry._id)}>
+                        <i className="fa fa-pencil-alt"></i> Edit</Link>
                     </div>
-                    <div className={Style.main}>
-                        
+
+                    <div className={Style.main}>    
                         <img src={this.props.thumbnail} />
     
                         <div className={Style.info}>
-                            <h4>{this.props.drinkName}</h4>
-                            <h6>{this.props.volume}</h6>
-                        </div>
-                        
+                            <h4>{this.props.entry.drinkName}</h4>
+                            <h6>{`${this.props.entry.volume.amount} ${this.props.entry.volume.measure}`}</h6>
+                        </div>    
                     </div>
+
                     <div className={Style.footer}>
-                        {this.props.alcoholic && <p><i className="fa fa-cocktail"></i> Alcoholic</p>}
-                        {this.props.caffeinated && <p><i className="fa fa-coffee"></i> Caffeinated</p>}
+                        {this.props.entry.containsAlcohol && <p><i className="fa fa-cocktail"></i> Alcoholic</p>}
+                        {this.props.entry.containsCaffeine && <p><i className="fa fa-coffee"></i> Caffeinated</p>}
                     </div>
                 </div>
             )

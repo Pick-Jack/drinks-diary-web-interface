@@ -1,0 +1,92 @@
+@import '../../../_helpers/style-mixins/colors';
+
+#desktopEntryForm {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-top: 50px;
+
+    .entryRow {
+        width: 100%;
+        display: flex;
+        justify-content: space-evenly;
+
+        .entryCol {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            box-sizing: border-box;
+            padding: 0 25px;
+            margin: 25px 0;
+        }    
+    }
+
+    .entryThumbnail {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        align-self: center;
+        background-color: lightgray;
+        margin: 20px 0;
+    }
+
+    .formActions {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        box-sizing: border-box;
+        padding: 0 25px;
+
+        .left { button, a {margin-right: 25px; } }
+        .right { button, a { margin-left: 25px; } }
+    }
+}
+
+#mobileEntryForm {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    padding: 0 1vw;
+    margin: 3vh 0;
+
+    
+    img.entryThumbnail {
+        width: 20vh;
+        height: 20vh;
+        margin: 5vw 0;
+        border-radius: 50%;
+        align-self: center;
+        background-color: lightgray;
+    }
+
+    .section {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        margin: 1vh 0;
+    }
+
+    .sectionTitle {
+        width: 100%;
+        margin: 2vh 0;
+        border-bottom: 1px solid $theme-color;
+        h3 { margin: 0 3px; }
+    }
+
+    .formActions {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        box-sizing: border-box;
+        margin-top: 25px;
+        padding: 0 2vw;
+
+        .actionsLeft {
+            a, Button {
+                margin-right: 25px;
+            }
+        }
+    }
+}

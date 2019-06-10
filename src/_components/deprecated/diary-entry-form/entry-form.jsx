@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import { MessageTypes } from '../../_helpers/enums'
 import { setBackOption } from '../../_redux/actions/app.actions';
 import { flashMessage } from '../../_redux/actions/message-flash.actions';
-import { createEntry, updateEntry, deleteEntry, unsetDiaryError, resetDiarySuccessStatus } from '../../_redux/actions/diary.actions'
+import { updateActiveTitle, createEntry, updateEntry, deleteEntry, unsetDiaryError, resetDiarySuccessStatus } from '../../_redux/actions/diary.actions'
 
 // Component Imports 
 import DeleteEntryModal from './delete-entry-modal'
@@ -46,6 +46,9 @@ class EntryForm extends React.Component {
                 }
             }
         }
+
+        if (!props.activeEntry) { this.props.updateActiveTitle("Create Entry") } 
+        else { this.props.updateActiveTitle("Edit Entry") }
     }
 
     componentDidMount() {
@@ -156,7 +159,7 @@ class EntryForm extends React.Component {
                 caffeine: {
                     status: { $set: status },
                     content: { $set: content }
-                } 
+                }
             })
         })
     }
@@ -455,7 +458,11 @@ const mapDispatchToProps = (dispatch) => {
         },
         resetDiarySuccessStatus: () => {
             dispatch(resetDiarySuccessStatus())
+        },
+        updateActiveTitle: (title) => {
+            dispatch(updateActiveTitle(title))
         }
+            
     }
 }
 

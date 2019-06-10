@@ -1,12 +1,15 @@
 // React imports
 import React from 'react';
 // Router imports
-import { Redirect } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 // Redux imports
 import { connect } from 'react-redux'
 import { clearErrorState } from '../../_redux/actions/app.actions'
 // Style imports
 import Style from './error-view.module.scss'
+import ButtonStyle from '../../_helpers/style-utility/buttons.module.scss'
+// Image imports
+import Logo from '../../_images/beverage.svg'
 
 
 class ErrorView extends React.Component {
@@ -39,35 +42,31 @@ class ErrorView extends React.Component {
 
     render() {
         if (this.props.errorState !== undefined) {
-            if (this.props.platform === "DESKTOP") {
-                return (
-                    <div id={Style.desktopErrorPage}>
-                        <div className={Style.container}>
-                        
-                            <div className={Style.title}>
-                                <h2>{this.props.errorState.code}</h2>
-                                <h4>- {this.errorTypes[this.props.errorState.code].title}</h4>
-                            </div>
-                            
-                            <div className={Style.message}>
-                                <p>{this.errorTypes[this.props.errorState.code].message}</p>
-                            </div>
-                        
+            return (
+                <div id={Style.errorPage}>
+
+                    <img className={Style.logo} src={Logo} />
+
+                    <div className={Style.container}>
+                        <div className={Style.title}>
+                            <h2>{this.props.errorState.code}</h2>
+                            <h4>- {this.errorTypes[this.props.errorState.code].title}</h4>
                         </div>
-                    </div>    
-                );
-            }
-            else if (this.props.platform === "MOBILE") {
-                return (
-                    <div className={Style.mobileErrorPage}>
-                    
+                        
+                        <div className={Style.message}>
+                            <p>{this.errorTypes[this.props.errorState.code].message}</p>
+                        </div>
                     </div>
-                )
-            }
-        } 
-        return (
-            <Redirect from={this.props.match.url} to="/" />
-        )
+
+                    <div className={Style.options}>
+                        <Link to={""} className={ButtonStyle.button}><i className="fa fa-arrow-left"></i>Back</Link>
+                        <button className={ButtonStyle.buttonDanger}><i className="fa fa-bug"></i>Report Bug</button>
+                    </div>
+                </div>    
+            );
+        } else {
+            return (<Redirect from={this.props.match.url} to="/" />)
+        }
     }
 }
 

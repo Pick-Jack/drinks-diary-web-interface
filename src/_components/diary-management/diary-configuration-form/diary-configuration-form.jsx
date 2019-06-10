@@ -42,6 +42,7 @@ class DiaryConfigurationForm extends React.Component {
         else if (this.props.platform === "MOBILE") { 
             DiaryConfigForm = MobileDiaryConfigForm;
         }
+
         return(
             <DiaryConfigForm {...this.props} {...this.state} onDeleteEntry={this.deleteDiary} backUrl={backUrl} 
                 toggleDeleteConfirmation={this.toggleDeleteConfirmation} updateDiaryConfiguration={this.updateDiaryConfiguration} 

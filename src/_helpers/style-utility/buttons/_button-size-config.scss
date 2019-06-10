@@ -2,7 +2,7 @@
 %button-xs {
     /* Extra small devices (phones, 600px and down) */
     @media only screen and (max-width: $xs) {
-        height: 5.5vh;
+        height: 11vw;
         font-size: 1em;
         padding: 0vw 0.5vw;
     } 
@@ -18,7 +18,8 @@
 %button-sm {
     /* Extra small devices (phones, 600px and down) */
     @media only screen and (max-width: $xs) {
-        height: 7vh;
+        height: 14vw;
+        min-width: 10vw;
         font-size: 1.3em;
         padding: 0.2vh 2vw;
     } 
@@ -34,7 +35,7 @@
 %button-lg {
     /* Extra small devices (phones, 600px and down) */
     @media only screen and (max-width: $xs) {
-        height: 8.5vh;
+        height: 17vw;
         font-size: 1.75em;
         padding: 0.5vh 1vw;
     } 

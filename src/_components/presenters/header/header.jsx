@@ -17,7 +17,7 @@ const Header = (props) => {
                 <img className={Style.logo} src={logo} />
 
                 <div className={Style.headerRight}>
-                    <h4>Welcome User</h4>
+                    <h4>Welcome {props.displayName}</h4>
                     
                     <Link to={{pathname: "/account", state: {prevLocation: props.location.pathname}}} className={Style.accountOption}>
                         <img src={profile} />
@@ -28,24 +28,11 @@ const Header = (props) => {
     }
     else if (props.platform == "MOBILE") {
         return (
-            <div className={Style.mobileHeader}>
-                {
-                    (props.backOption.optionType === OptionTypes.logOut) &&
-                    <Link to={props.backOption.optionLocation} className={Style.headerbuttonSignOut} >
-                        <i className="fa fa-sign-out-alt"></i>
-                    </Link>
-                }
-                {
-                    (props.backOption.optionType === OptionTypes.back) &&
-                    <Link to={props.backOption.optionLocation} className={Style.headerButton}>
-                        <i className="fa fa-arrow-left"></i>
-                    </Link>
-                }
-                <Link to={{pathname: "/account", state: {prevLocation: props.location.pathname}}} className={Style.headerButton}>
-                    <i className="fa fa-user-cog"></i>
-                </Link>
-                <a className={Style.headerButton}><i className="fa fa-question"></i></a>
-                <img className={Style.logo} src={logo} />
+            <div id={Style.mobileHeader}>
+                
+                <div className={Style.logo}><img src={logo} alt="" /></div>
+                <div className={Style.profilePicture}><img src={profile} alt="" /></div>
+
             </div>
         )
     }
@@ -57,8 +44,32 @@ const Header = (props) => {
 const mapStateToProps = (state) => {
     return ({
         platform: state.app.platform,
-        backOption: state.app.backOption
+        backOption: state.app.backOption,
+        displayName: state.user.displayName
     })
 }
 
 export default withRouter(connect(mapStateToProps)(Header))
+
+
+/*
+<div className={Style.mobileHeader}>
+    {
+        (props.backOption.optionType === OptionTypes.logOut) &&
+        <Link to={props.backOption.optionLocation} className={Style.headerbuttonSignOut} >
+            <i className="fa fa-sign-out-alt"></i>
+        </Link>
+    }
+    {
+        (props.backOption.optionType === OptionTypes.back) &&
+        <Link to={props.backOption.optionLocation} className={Style.headerButton}>
+            <i className="fa fa-arrow-left"></i>
+        </Link>
+    }
+    <Link to={{pathname: "/account", state: {prevLocation: props.location.pathname}}} className={Style.headerButton}>
+        <i className="fa fa-user-cog"></i>
+    </Link>
+    <a className={Style.headerButton}><i className="fa fa-question"></i></a>
+    <img className={Style.logo} src={logo} />
+</div>
+*/

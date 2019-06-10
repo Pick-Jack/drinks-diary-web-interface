@@ -87,70 +87,14 @@
 
 
 
-
-#accountView {
-    width: 80%; 
+.mobileAccountView {
+    width: 100%;
     display: flex;
     flex-direction: column;
+    box-sizing: border-box;
+    margin-bottom: 5vh;
+    margin-top: 3vh;
 
-    margin: 75px auto;
-    margin-bottom: 0px;
-
-    .overview {
-        @extend %row;
-        align-items: center;
-        
-        img {
-            width: 200px;
-            height: 200px;
-            display: block;
-            margin: 0px 125px;
-            border-radius: 50%;
-            background-color: lightgrey;
-        }
-
-        h3 { margin: 0; }
-    }
-
-    .account {
-        @extend %row;
-        justify-content: space-evenly;
-        margin-top: 50px;
-
-        %col {
-            width: 45%;
-            display: flex;
-            flex-direction: column;
-
-            h3 {
-                margin: 5px 0px;
-            }
-        }
-
-        .details {
-            @extend %col;
-        }
-
-        .settings {
-            @extend %col;
-        }
-
-        .divider {
-            width: 100%;
-            height: 1px;
-            border-bottom: 1px solid grey;
-        }
-
-        .infoRow {
-            margin: 10px 0;
-            p { margin: 0px; }
-        }
-    }
-}
-
-
-.mobileAccountView {
-    
     .info {
         display: flex;
         align-items: center;
@@ -179,4 +123,11 @@
         p { margin: 0.2vh; }
     }
 
+    .accountOptions {
+        button {
+            margin: 3vw 0;
+            padding-left: 5vw;
+            box-sizing: border-box;
+        }
+    }
 }

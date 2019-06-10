@@ -1,0 +1,48 @@
+
+@import '../../../_helpers/style-mixins/colors';
+
+#diaryOverview {
+    padding: 5vh 0;
+
+    .diaryDates {
+
+    }
+
+    .diaryOptions {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        margin-top: 5vh;
+
+        .option {
+            width: 75vw;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+
+            padding: 4vw;
+            margin: 2vh 0;
+            
+            border-width: 1px;
+            border-radius: 2px;
+            border-style: solid;
+            border-color: $theme-color;
+
+            color: black;
+            text-decoration: none;
+            box-sizing: border-box;
+            box-shadow: -1px 0px 7px 3px rgba($theme-color, 0.2);
+
+            i { font-size: 2em; }
+            p { font-size: 1.5em; margin: 0; }
+
+        }
+
+        .option:hover {
+            color: white;
+            cursor: pointer;
+            background-color: $theme-color;
+            box-shadow: -1px 0px 7px 3px rgba($theme-color, 0);
+        }
+    }
+}

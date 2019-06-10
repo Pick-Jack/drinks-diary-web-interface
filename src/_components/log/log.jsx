@@ -94,25 +94,33 @@ class Log extends React.Component {
             )
         }
         else if (this.props.platform === "MOBILE") {
-            const nextEnabled = !(this.props.activeDate < this.props.endDate)
-            const prevEnabled = !(this.props.activeDate > this.props.startDate)
-
             return (
                 <div className={Style.mobileLogView}>
 
                     <div className={Style.viewOptions}>
-                        <button className={ButtonStyle.buttonXS} onClick={this.props.onPrev} disabled={prevEnabled}>
+                        <button className={ButtonStyle.buttonXS} onClick={() => this.updateLogState("previous")} disabled={!this.state.prevEnabled}>
                             <i className="fa fa-arrow-left"></i> Previous
                         </button>
-                        <button className={ButtonStyle.buttonXS} onClick={this.props.onNext} disabled={nextEnabled}>
+                        <button className={ButtonStyle.buttonXS} onClick={() => this.updateLogState("next")} disabled={!this.state.nextEnabled}>
                             Next <i className="fa fa-arrow-right"></i>
                         </button>
                     </div>
 
-                    <div className={Style.logView}>
-                        <div className={Style.logDate}><h5>{this.getDisplayDate()}</h5></div>
-                        <div className={Style.logMain}>{this.props.entries}{this.props.children}</div>
+                    <div className={Style.logDate}>
+                        <h4>{ this.state.displayedDatetime.format("DD-MM-YYYY") == Moment().format("DD-MM-YYYY") ? 
+                        `Today (${this.state.displayedDatetime.format("DD-MM-YYYY")})` :
+                        this.state.displayedDatetime.format("DD-MM-YYYY") }</h4>
                     </div>
+
+                    {!this.state.displayedDatetime.isAfter(new Moment()) ? 
+                    (<div className={Style.logMain}>{this.state.displayedEntries}{this.props.children}</div>) :
+                    (<div className={Style.futureEntry}>
+                        <div className={Style.message}>
+                            <h3><i className="fa fa-calendar-times"></i> Not quite yet...</h3>
+                            <h5>You can create an entry on this date when we get there.</h5>
+                        </div>
+                    </div>)}
+
                 </div>
             )
         }

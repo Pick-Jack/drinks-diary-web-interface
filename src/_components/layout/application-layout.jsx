@@ -1,10 +1,7 @@
 // React Imports
 import React from 'react';
 // Router imports
-import { Link, withRouter } from 'react-router-dom'
-// Redux imports
-import { connect } from 'react-redux'
-import { OptionTypes } from '../../_helpers/enums';
+import { withRouter } from 'react-router-dom'
 // Component Imports
 import MessageFlash from '../message-flash'
 import { Header } from '../presenters/header';
@@ -22,7 +19,6 @@ class ApplicationLayout extends React.Component {
                 <div id={Style.desktopLayout}>
                     <Header />
                     <PageOptions />
-                    
                     <div className={Style.page}>
                         <div className={Style.pageMain}>
                             <div className={Style.messageFlashContainer}><MessageFlash /></div>
@@ -36,11 +32,11 @@ class ApplicationLayout extends React.Component {
             return (
                 <div id={Style.mobileLayout}>
                     <Header />
-                    
+                    <PageOptions />
                     <div className={Style.page}>
-                        {this.props.children}
+                        <div className={Style.messageFlashContainer}><MessageFlash /></div>
+                        <div className={Style.content}>{this.props.children}</div>
                     </div>
-
                 </div>
             )
         }
@@ -50,9 +46,4 @@ class ApplicationLayout extends React.Component {
     }
 }
        
-const mapStateToProps = (state) => ({
-    backOption: state.app.backOption,
-    navOptions: state.app.navOptions
-})
-
-export default withRouter(connect(mapStateToProps)(ApplicationLayout))
+export default withRouter(ApplicationLayout)

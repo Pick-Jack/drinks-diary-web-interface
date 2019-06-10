@@ -1,9 +1,5 @@
 import { submitApiRequest, Methods } from './service-utils';
-import { ValidationException, UnauthorisedException } from "../_helpers/errors";
-
-
 const diary_api_endpoint = `${process.env.REACT_APP_API_URL}/diary`
-
 
 
 // Definition of Error type for throwing Errors from the response

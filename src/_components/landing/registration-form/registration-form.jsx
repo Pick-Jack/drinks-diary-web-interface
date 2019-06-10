@@ -4,11 +4,26 @@ import React from 'react'
 import { Link , withRouter } from 'react-router-dom'
 // Redux imports
 import { connect } from 'react-redux'
-import { submitRegistrationRequest } from '../../_redux/actions/user.actions'
+import { MessageTypes } from '../../../_helpers/enums';
+import { clearErrorState } from '../../../_redux/actions/app.actions'
+import { flashMessage } from '../../../_redux/actions/message-flash.actions'
+import { submitRegistrationRequest } from '../../../_redux/actions/user.actions'
+// Service imports
+import { register } from '../../../_services/users.service'
+// Component imports 
+import MessageFlash from '../../message-flash'
 // Style imports 
 import Style from './registration-form.module.scss'
-import ButtonStyle from '../../_helpers/style-utility/buttons.module.scss'
-import FormStyle from '../../_helpers/style-utility/form-control.module.scss'
+import ButtonStyle from '../../../_helpers/style-utility/buttons.module.scss'
+import FormStyle from '../../../_helpers/style-utility/form-control.module.scss'
+
+
+class ResponseError extends Error {
+    constructor(info) {
+        super()
+        this.info = info
+    }
+}
 
 
 class RegistrationForm extends React.Component {
@@ -17,16 +32,12 @@ class RegistrationForm extends React.Component {
         super(props)
 
         this.state = {
-            email: "",
-            forename: "",
-            surname: "",
-            gender: "",
-            dob: "",
-            password: "",
-            cPassword: ""
+            email: "", 
+            forename: "", surname: "", gender: "", dob: "", 
+            password: "", cPassword: ""
         }
     }
-    
+
     onChangeInput = (event, key) => {
         var newState = {}
         newState[key] = event.target.value
@@ -34,22 +45,59 @@ class RegistrationForm extends React.Component {
     }
 
     onChangeEmail = (event) => {
-        // TODO: email validation
         this.setState({email: event.target.value})
     }
 
     onChangePassword = (event) => {
-        // TODO: password validation
         this.setState({password: event.target.value})
+    }
+
+    passwordValidation = () => {
+        var validationMessage;
+        var regex = RegExp(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])/)
+        
+        if (this.state.password.length < 6 || this.state.password.length > 72) {
+            validationMessage = "Passwords must be between 6 and 72 characters long."
+        } else if (!regex.test(this.state.password)) {
+            validationMessage = "Password contains invalid characters."
+        } else if (this.state.password !== this.state.cPassword) {
+            validationMessage = "Passwords do not match, please re-enter the confirmation password."
+        }
+
+        return {isValid: (validationMessage !== "") ,message: validationMessage};        
     }
 
     onSubmit = (event) => {
         event.preventDefault()
 
-        // Convert date string to object
-        var dob = new Date(this.state.dob).toISOString()
-        this.props.submitRegistrationRequest({...this.state, dob})
-        this.props.history.push("/")
+        // Validate form inputs
+        var validationMessage;
+        const passwordValidation = this.passwordValidation();
+        if (passwordValidation.isValid) {
+            validationMessage = passwordValidation.message
+        } 
+        
+        // Flash validation message if validation failed
+        if (validationMessage) {
+            this.props.flashMessage(validationMessage, MessageTypes.warning)
+            return
+        }
+        
+        // Submit registration request to API
+        register({...this.state, dob: new Date(this.state.dob).toISOString()})
+            .then( (response) => {
+                if (response.error) { throw new ResponseError(response.response.error) }
+                this.props.history.push("/")
+            })
+            .catch( (error) => {
+                // Handle response errors
+                switch(error.info.type) {
+                    case "ValidationError":
+                        const message = `Field ${error.info.errors[0].field} failed validation checks. Please check input.` 
+                        this.props.flashMessage(message, MessageTypes.error)
+                        break;
+                }
+            })
     }
 
     render() {
@@ -57,6 +105,7 @@ class RegistrationForm extends React.Component {
             <div id={Style.registrationForm}>
                 
                 <h3>Register an account...</h3>
+                <MessageFlash />
 
                 <form onSubmit={(event) => this.onSubmit(event)}>
                     
@@ -122,12 +171,16 @@ class RegistrationForm extends React.Component {
     }
 }
 
+const mapStateToProps = (state) => ({
+    error: state.app.errorState
+})
+
 const mapDispatchToProps = (dispatch) => {
     return {
-        submitRegistrationRequest: (args) => {
-            dispatch(submitRegistrationRequest(args))
-        },
+        flashMessage: (message, type) => {
+            dispatch(flashMessage(message, type))
+        }
     }
 }
 
-export default withRouter(connect(null, mapDispatchToProps)(RegistrationForm));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(RegistrationForm))

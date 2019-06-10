@@ -2,7 +2,7 @@
 @import '../../../_helpers/style-mixins/colors';
 
 
-.pageOptions {
+#desktopPageOptions {
     display: flex;
     justify-content: space-between;
     background-color: $theme-color-transparent;
@@ -47,4 +47,64 @@
             color: $danger-color;
         }
     }
+}
+
+
+#mobilePageOptions {
+    width: 100%;
+    min-height: 15vw;
+    background-color: $theme-color-transparent;
+    
+    .pageOptions {
+        display: flex;
+        align-items: center;
+        min-height: inherit;
+        justify-content: space-between;
+        border-bottom: 1px solid black;
+        padding: 2vw 5vw;
+        
+        .option {
+            display: flex;
+            align-items: center;
+            font-size: 2.2em;
+            color: black;
+            
+            // Remove button/anchor styling
+            background-color: transparent;
+            text-decoration: none;
+            border-color: none;
+            border-style: none;
+            border-image: none;
+            border-width: 0px;
+        }
+    }
+
+    .collapsibleOptions {
+        width: 100%;
+        display: flex;
+        align-items: flex-end;
+        flex-direction: column;
+        border-bottom: 1px solid black;
+        box-sizing: border-box;
+        padding-right: 3vw;
+        margin-top: 3vw;
+    
+        .option, %option {
+            color: black;
+            margin: 3vw 0;
+            text-decoration: none;
+            i { margin-left: 5vw; }
+        }
+
+        .signOutOption {
+            @extend %option;
+            color: $danger-color;
+        }
+    }
+
+    .hideCollapsibleOptions {
+        display: none;
+        overflow: hidden;
+    }
+
 }

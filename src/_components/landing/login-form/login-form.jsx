@@ -2,26 +2,42 @@
 import React from 'react'
 // Redux imports
 import { connect } from 'react-redux'
-import { submitLoginRequest } from '../../_redux/actions/user.actions'
+import { MessageTypes } from '../../../_helpers/enums';
+import { clearErrorState } from '../../../_redux/actions/app.actions'
+import { submitLoginRequest } from '../../../_redux/actions/user.actions'
+import { flashMessage } from '../../../_redux/actions/message-flash.actions'
 // Router imports
 import { Link, withRouter } from 'react-router-dom'
+// Component imports 
+import MessageFlash from '../../message-flash'
 // Style imports
 import Style from './login-form.module.scss'
-import ButtonStyle from '../../_helpers/style-utility/buttons.module.scss'
-import FormStyle from '../../_helpers/style-utility/form-control.module.scss'
+import ButtonStyle from '../../../_helpers/style-utility/buttons.module.scss'
+import FormStyle from '../../../_helpers/style-utility/form-control.module.scss'
+
 
 
 class LoginForm extends React.Component {
     
     constructor(props) {
         super(props)
-
-        this.state = {
-            email: "",
-            password: ""
-        }
+        this.state = { email: "", password: "" }
     }
     
+    componentDidUpdate(prevProps) {
+        if (this.props.error && prevProps.error != this.props.error) {
+            switch(this.props.error.code) {
+                case 500:
+                    throw new Error()
+                case 401: default: 
+                    const message =  "Failed to validate credentials, check username or password"
+                    this.props.flashMessage(message, MessageTypes.error)
+                    break;
+            }
+            this.props.clearErrorState()
+        }
+    }
+
     onChangeEmail = (event) => {
         this.setState({email: event.target.value})
     }
@@ -41,6 +57,8 @@ class LoginForm extends React.Component {
             <div id={Style.loginForm}>
                 <h3>Welcome...</h3>
                 <h5>Sign in or register an account today.</h5>
+
+                <MessageFlash />
 
                 <form onSubmit={(event) => this.onSubmit(event)}>
                     <div className={FormStyle.inputGroup}>
@@ -65,12 +83,23 @@ class LoginForm extends React.Component {
     }
 }
 
+const mapStateToProps = (state) => ({
+    error: state.app.errorState
+    
+})
+
 const mapDispatchToProps = (dispatch) => {
     return {
         submitLoginRequest: (email, password) => {
             dispatch(submitLoginRequest(email, password))
+        },
+        flashMessage: (message, type) => {
+            dispatch(flashMessage(message, type))
+        },
+        clearErrorState: () => {
+            dispatch(clearErrorState())
         }
     }
 }
 
-export default withRouter(connect(null, mapDispatchToProps)(LoginForm))
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(LoginForm))

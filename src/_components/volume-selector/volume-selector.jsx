@@ -49,16 +49,18 @@ class VolumeSelector extends Component {
                 }
 
                 this.setState({measurementOptions: optionsList})
-
-                // Simulate user selection for to pre-select first option
-                const event = {}
-                event.target = {}
-                event.target.value = results[0].key
-                this.props.onChange(event, "measure")
+                this.onChange("measure", results[0].key)
             })
             .catch(error => {
                 console.log(`Error fetching volumes: ${error.message}`)
             })
+    }
+
+    onChange = (key, value) => {
+        this.props.onChange({
+            value: key==="value" ? value : this.props.volume,
+            measure: key==="measure" ? value : this.props.measure
+        })
     }
 
     render() {
@@ -69,9 +71,9 @@ class VolumeSelector extends Component {
 
                     <input type="number" min="1" placeholder={"value..."}
                     required={this.props.required ? this.props.required : false} value={this.props.volume} 
-                    onChange={(event) => this.props.onChange(event, "value")} />
+                    onChange={(event) => this.onChange("value", event.target.value)} />
 
-                    <select value={this.props.measure} onChange={(event) => this.props.onChange(event, "measure")} >
+                    <select value={this.props.measure} onChange={(event) => this.onChange("measure", event.target.value)} >
                         {this.state.measurementOptions}
                     </select>
                 </div>
